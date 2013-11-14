@@ -4,8 +4,10 @@ Drill
 How to build and run
 --------------------
 
+```
 $ mkdir dist
 $ make
+```
 
 Usefull information
 -------------------
