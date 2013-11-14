@@ -9,7 +9,7 @@ $ mkdir dist
 $ make
 ```
 
-Usefull information
+Useful information
 -------------------
 
 sqrt(65) ~= 8.06226
