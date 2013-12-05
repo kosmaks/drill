@@ -16,7 +16,6 @@ namespace drill {
     void off(const callback_t &callback);
     void clear();
 
-
   private:
     std::list<callback_t> _callbacks;
     std::list<callback_t> _once_callbacks;

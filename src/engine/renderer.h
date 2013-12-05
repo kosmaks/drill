@@ -1,21 +1,23 @@
 #pragma once
 
+#include "scene.h"
+
 namespace drill {
-  class renderer {
+  class Renderer {
   public:
-    renderer();
-    virtual ~renderer();
+    Renderer();
+    virtual ~Renderer();
 
-    void init_window(const std::string &title);
-    void set_fullscreen_enabled(bool enabled);
+    virtual void init_window(const std::string &title) = 0;
+    virtual void set_fullscreen_enabled(bool enabled) = 0;
 
-    void start();
-    void pause();
-    void stop();
+    virtual void start() = 0;
+    virtual void pause() = 0;
+    virtual void stop() = 0;
 
-    event on_start;
-    event on_pause;
-    event on_stop;
-    event on_update;
+    void use_scene(Scene scene);
+
+  private:
+    Scene *current_scene;
   };
 }
