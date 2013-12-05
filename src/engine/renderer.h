@@ -8,6 +8,14 @@ namespace drill {
 
     void init_window(const std::string &title);
     void set_fullscreen_enabled(bool enabled);
-    void run();
+
+    void start();
+    void pause();
+    void stop();
+
+    event on_start;
+    event on_pause;
+    event on_stop;
+    event on_update;
   };
 }

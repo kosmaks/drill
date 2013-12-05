@@ -6,5 +6,5 @@ SOURCES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 LIBS = $(wildcard lib/*.cpp) $(wildcard lib/*/*.cpp)
 
 all:
-	$(CC) -o dist/main.exe $(CFLAGS) $(LIBS) $(SOURCES) -I./lib -I./src $(CLIBS)
-	dist/main.exe
+	$(CC) -o dist/main.exe $(CFLAGS) $(LIBS) $(SOURCES) -I./lib -I./src $(CLIBS) -O1
+	time dist/main.exe
