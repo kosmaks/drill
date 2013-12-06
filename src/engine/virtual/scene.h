@@ -1,13 +1,14 @@
 #pragma once
 
 namespace drill {
-  class Scene {
+  class scene {
   public:
-    Scene();
-    virtual ~Scene();
+    scene();
+    virtual ~scene();
 
     virtual void load() = 0;
     virtual void compile() = 0;
+
     virtual void start() = 0;
     virtual void stop() = 0;
     virtual void update() = 0;

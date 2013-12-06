@@ -1,0 +1,3 @@
+set path+=src
+set path+=lib
+
