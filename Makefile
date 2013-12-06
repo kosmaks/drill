@@ -7,4 +7,4 @@ LIBS = $(wildcard lib/*.cpp) $(wildcard lib/**/*.cpp)
 
 all:
 	@$(CC) -o dist/main.exe $(CFLAGS) $(LIBS) $(SOURCES) -I./lib -I./src $(CLIBS) -O1
-	@time dist/main.exe
+	@dist/main.exe

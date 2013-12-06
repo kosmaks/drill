@@ -12,7 +12,7 @@
 #define LOG_ERROR(x) (std::cerr << __FILE__ << ":" << __LINE__ << " [#] " << x << std::endl)
 
 namespace drill {
-  class application final {
+  class application {
   public:
     typedef struct {
       renderer *_renderer;

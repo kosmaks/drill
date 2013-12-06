@@ -3,7 +3,7 @@
 #include "engine/virtual/renderer.h"
 
 namespace drill {
-  class glrenderer : public drill::renderer {
+  class glrenderer : public renderer {
   public:
     glrenderer();
     virtual ~glrenderer();
