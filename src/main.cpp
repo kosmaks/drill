@@ -10,6 +10,10 @@ int main() {
   drill::glrenderer renderer(cont);
   drill::application app;
 
+  drill::scene logo_scene;
+
+  renderer.use_scene(logo_scene);
+
   app.add_service(renderer);
   app.run();
 
