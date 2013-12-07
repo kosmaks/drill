@@ -1,4 +1,5 @@
 #include "engine/core/app.h"
+#include "engine/core/types.h"
 #include "engine/core/events.h"
 #include "engine/opengl/glrenderer.h"
 #include "engine/opengl/glcontext.h"
