@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-std=c++0x -Wall
-CLIBS=
+CLIBS=-lglfw3 -framework Cocoa -framework OpenGL -framework IOKit -lGLEW
 
 SOURCES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
 LIBS = $(wildcard lib/*.cpp) $(wildcard lib/**/*.cpp)

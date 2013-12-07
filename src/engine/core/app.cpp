@@ -2,19 +2,36 @@
 
 using namespace drill;
 
-application::application(const config_t &config) {
-  _config = config;
-
-  dependency(_config._renderer, "renderer");
-  dependency(_config._compiler, "compiler");
+application::application() {
 }
 
 application::~application() {
 }
 
-template<class T> void application::dependency(T *item, const std::string &title) {
-  if (item == NULL) {
-    LOG_ERROR("Unable to load module '" << title << "'!");
-    throw "Module loading failure.";
+void application::add_service(service& serv) {
+  _services.push_back(&serv);
+  serv.init();
+}
+
+void application::run() {
+  if (_frozen) {
+    _frozen = false;
+    return;
   }
+
+  _running = true;
+  while (_running) {
+    if (_frozen) { continue; }
+    for (auto serv : _services) {
+      serv->update();
+    }
+  }
+}
+
+void application::freeze() {
+  _frozen = true;
+}
+
+void application::kill() {
+  _running = false;
 }

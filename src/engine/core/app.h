@@ -2,9 +2,10 @@
 
 #include <iostream>
 #include <functional>
+#include <list>
 
-#include "engine/virtual/renderer.h"
-#include "engine/virtual/compiler.h"
+#include "engine/core/errors.h"
+#include "engine/virtual/service.h"
 
 #define LOG_DEBUG(x) (std::cout << __FILE__ << ":" << __LINE__ << " [.] " << x << std::endl)
 #define LOG_INFO(x)  (std::cout << __FILE__ << ":" << __LINE__ << " [-] " << x << std::endl)
@@ -14,17 +15,19 @@
 namespace drill {
   class application {
   public:
-    typedef struct {
-      renderer *_renderer;
-      compiler *_compiler;
-    } config_t;
-
-    application(const config_t &config);
+    application();
     ~application();
 
-  private:
-    template<class T> static void dependency(T *item, const std::string &title="");
+    void add_service(service &serv);
 
-    config_t _config;
+    void run();
+    void freeze();
+    void kill();
+
+  private:
+    bool _running = false;
+    bool _frozen = false;
+
+    std::list<service*> _services;
   };
 }
