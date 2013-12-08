@@ -10,7 +10,7 @@ WLINKS = opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.li
 SOURCES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
 
 all:
-	@$(CC) -o dist/main $(CFLAGS) $(LIBS) $(SOURCES) -I./lib -I./src -O1
+	@$(CC) -o dist/main $(CFLAGS) $(CLIBS) $(SOURCES) -I./lib -I./src -O1
 	@dist/main
 
 windows:

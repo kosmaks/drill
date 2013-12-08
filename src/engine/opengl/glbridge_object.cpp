@@ -16,7 +16,7 @@ void glbridge_object::draw() {
   glColor3f(current_target->color.x, 
             current_target->color.y, 
             current_target->color.z);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vertices);
   glEnableClientState(GL_VERTEX_ARRAY);
   glDrawArrays(GL_TRIANGLES, 0, current_target->triangles.count);
 }
