@@ -6,7 +6,8 @@
 namespace drill {
   class glbridge_object : public bridge<object> {
   public:
-    void compile(object &obj);
-    void draw(object &obj);
+    glbridge_object(object &target) : bridge(target) {} 
+    void compile();
+    void draw();
   };
 }

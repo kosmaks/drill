@@ -30,8 +30,15 @@ namespace drill {
   } vector4_t;
 
   typedef struct {
-    vector3_t coord, normal;
-    vector2_t texture;
-  } vertex_t; 
+    vector3_t *vertices, *normals;
+    vector2_t *textures;
+    uint32_t count;
+
+    void try_delete() {
+      if (vertices) delete vertices;
+      if (normals) delete vertices;
+      if (textures) delete vertices;
+    }
+  } coordset_t;
 
 }
