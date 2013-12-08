@@ -9,5 +9,7 @@ namespace drill {
     glbridge_object(object &target) : bridge(target) {} 
     void compile();
     void draw();
+  private:
+    uint32_t vbo;
   };
 }

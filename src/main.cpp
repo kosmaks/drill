@@ -13,12 +13,14 @@ int main() {
   drill::glcontext cont("Course work: Drill");
   drill::glrenderer renderer(cont);
   drill::application app;
+  app.add_service(renderer);
 
   drill::scene logo_scene;
   drill::view test;
   drill::object_square square;
 
   drill::glbridge_object bridge_object(square);
+  bridge_object.compile();
   square.drawer = &bridge_object;
 
   logo_scene.add_view(test);
@@ -26,7 +28,6 @@ int main() {
 
   renderer.use_scene(logo_scene);
 
-  app.add_service(renderer);
   app.run();
 
   LOG_INFO("Application terminated");
