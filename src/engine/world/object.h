@@ -12,6 +12,8 @@ namespace drill {
     vector3_t rotation = { 0, 0, 0 };
     vector3_t scale    = { 1, 1, 1 };
 
+    vector3_t color = { 1.0f, 0.0f, 0.0f };
+
     void draw() { if (drawer) drawer->draw(); }
     bridge<object> *drawer;
 
