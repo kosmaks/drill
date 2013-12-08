@@ -7,17 +7,22 @@ using namespace drill;
 
 void glbridge_object::compile() {
   LOG_DEBUG("Compiling GL object");
-  glGenBuffersARB(1, &vbo);
-  glBindBufferARB(GL_ARRAY_BUFFER, vbo);
-  glBufferDataARB(GL_ARRAY_BUFFER, 
-                  sizeof(vector3_t) * current_target->triangles.count, 
-                  current_target->triangles.vertices, 
-                  GL_STATIC_DRAW);
+
+  vertices = generate_vbo(current_target->triangles.vertices, 
+               sizeof(vector3_t) * current_target->triangles.count);
   glVertexPointer(3, GL_FLOAT, 0, NULL);
 }
 
 void glbridge_object::draw() {
-  glBindBufferARB(GL_ARRAY_BUFFER, vbo);
   glEnableClientState(GL_VERTEX_ARRAY);
+  glBindBufferARB(GL_ARRAY_BUFFER, vertices);
   glDrawArrays(GL_TRIANGLES, 0, current_target->triangles.count);
+}
+
+uint32_t glbridge_object::generate_vbo(void *pointer, uint32_t size) {
+  uint32_t vbo;
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, size, pointer, GL_STATIC_DRAW);
+  return vbo;
 }

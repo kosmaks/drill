@@ -10,6 +10,8 @@ namespace drill {
     void compile();
     void draw();
   private:
-    uint32_t vbo;
+    uint32_t vertices;
+
+    uint32_t generate_vbo(void *pointer, uint32_t count);
   };
 }
