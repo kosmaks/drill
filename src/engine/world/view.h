@@ -7,7 +7,8 @@
 namespace drill {
   class view : public service {
   public:
-    bool active = true;
+    view() : active(true) {}
+    bool active;
 
     void init();
     void update();

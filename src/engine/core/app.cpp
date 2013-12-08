@@ -2,7 +2,7 @@
 
 using namespace drill;
 
-application::application() {
+application::application() : _running(false), _frozen(false) {
 }
 
 application::~application() {

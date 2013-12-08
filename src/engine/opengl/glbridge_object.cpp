@@ -7,7 +7,6 @@ using namespace drill;
 
 void glbridge_object::compile() {
   LOG_DEBUG("Compiling GL object");
-
   vertices = generate_vbo(current_target->triangles.vertices, 
                sizeof(vector3_t) * current_target->triangles.count);
   glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -17,8 +16,8 @@ void glbridge_object::draw() {
   glColor3f(current_target->color.x, 
             current_target->color.y, 
             current_target->color.z);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glEnableClientState(GL_VERTEX_ARRAY);
-  glBindBufferARB(GL_ARRAY_BUFFER, vertices);
   glDrawArrays(GL_TRIANGLES, 0, current_target->triangles.count);
 }
 

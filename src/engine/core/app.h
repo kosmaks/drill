@@ -25,8 +25,8 @@ namespace drill {
     void kill();
 
   private:
-    bool _running = false;
-    bool _frozen = false;
+    bool _running;
+    bool _frozen;
 
     std::list<service*> _services;
   };
