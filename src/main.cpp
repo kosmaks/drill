@@ -6,9 +6,16 @@
 #include "engine/opengl/glrenderer.h"
 #include "engine/opengl/glbridge_object.h"
 #include "engine/opengl/glcontext.h"
+#include "engine/resources/wavefront_reader.h"
 
 int main() {
   LOG_INFO("Application started");
+
+  drill::wavefront_reader reader;
+  drill::object box;
+
+  reader.load_from_file("dist/box.obj");
+  reader.to_object(box);
 
   drill::glcontext cont("Course work: Drill");
   drill::glrenderer renderer(cont);
@@ -17,14 +24,13 @@ int main() {
 
   drill::scene logo_scene;
   drill::view test;
-  drill::object_square square;
 
-  drill::glbridge_object bridge_object(square);
+  drill::glbridge_object bridge_object(box);
   bridge_object.compile();
-  square.drawer = &bridge_object;
+  box.drawer = &bridge_object;
 
   logo_scene.add_view(test);
-  test.add_drawable(square);
+  test.add_drawable(box);
 
   renderer.use_scene(logo_scene);
 

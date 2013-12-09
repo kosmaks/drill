@@ -6,13 +6,14 @@
 using namespace drill;
 
 void glbridge_object::compile() {
-  LOG_DEBUG("Compiling GL object");
+  LOG_DEBUG("Compiling GL object: " << current_target->triangles.count);
   vertices = generate_vbo(current_target->triangles.vertices, 
                sizeof(vector3_t) * current_target->triangles.count);
   glVertexPointer(3, GL_FLOAT, 0, NULL);
 }
 
 void glbridge_object::draw() {
+  glRotatef(0.5, 1, 1, 0);
   glColor3f(current_target->color.x, 
             current_target->color.y, 
             current_target->color.z);
