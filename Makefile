@@ -11,9 +11,11 @@ SOURCES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp
 
 all:
 	@$(CC) -o dist/main $(CFLAGS) $(CLIBS) $(SOURCES) -I./lib -I./src -O1
+	@cp -f res/* dist
 	@dist/main
 
 windows:
-	$(WC) /I.\lib /I.\src $(SOURCES) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
-	rm '*.obj' -f
-	dist/main.exe
+	@$(WC) /I.\lib /I.\src $(SOURCES) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
+	@rm '*.obj' -f
+	@cp -f res/* dist
+	@dist/main.exe

@@ -60,9 +60,9 @@ void wavefront_reader::load_from_file(const std::string &path) {
         break;
 
       case COMMAND:
-        state = (mem == "vt")   ? READ_VERTEX :
+        state = (mem == "v")    ? READ_VERTEX :
                 (mem == "t")    ? READ_TEXTURE :
-                (mem == "n")    ? READ_NORMAL :
+                (mem == "vn")   ? READ_NORMAL :
                 (mem == "f")    ? READ_FACE :
                 (mem == "\n" || 
                  mem == "\r" || 
