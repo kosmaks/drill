@@ -7,9 +7,11 @@ WCFLAGS=/DDIRECTX /DOPENGL
 WLIBS = $(wildcard lib/*.lib)
 WLINKS = opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
 
-SOURCES = $(wildcard src/*.cpp) $(wildcard src/engine/core/*.cpp) $(wildcard src/engine/virtual/*.cpp) $(wildcard src/engine/world/*.cpp) $(wildcard src/engine/resources/*.cpp)
-SOURCES_OGL = $(wildcard src/engine/opengl/*.cpp)
-SOURCES_DX = $(wildcard src/engine/directx/*.cpp)
+SOURCES = $(wildcard src/*.cpp) $(wildcard src/engine/core/*.cpp) \
+				 	$(wildcard src/engine/virtual/*.cpp) $(wildcard src/engine/world/*.cpp) \
+					$(wildcard src/engine/resources/*.cpp) $(wildcard src/engine/virtual/modules/*.cpp)
+SOURCES_OGL = $(wildcard src/engine/opengl/*.cpp) $(wildcard src/engine/opengl/modules/*.cpp)
+SOURCES_DX = $(wildcard src/engine/directx/*.cpp) $(wildcard src/engine/directx/modules/*.cpp)
 
 all:
 	@$(CC) -o dist/main $(CFLAGS) $(CLIBS) $(SOURCES) $(SOURCES_OGL) -I./lib -I./src -O1

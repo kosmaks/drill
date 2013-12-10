@@ -2,7 +2,8 @@
 
 using namespace drill;
 
-scene::scene() {
+scene::scene(module_source *msource) {
+  _msource = msource;
 }
 
 scene::~scene() {

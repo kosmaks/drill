@@ -3,26 +3,24 @@
 #include "engine/core/app.h"
 #include "engine/core/types.h"
 #include "engine/virtual/drawable.h"
-#include "engine/virtual/bridge.h"
+#include "engine/virtual/module_source.h"
+#include "engine/virtual/modules/object_compiler.h"
 
 namespace drill {
   class object : public drawable {
   public:
-    object() {
-      position = { 0, 0, 0 };
-      rotation = { 0, 0, 0 };
-      scale = { 1, 1, 1 };
-      color = { 1.0f, 0.0f, 0.0f };
-    }
-    vector3_t position;
-    vector3_t rotation;
-    vector3_t scale;
+    object(module_source *msource);
 
-    vector3_t color;
-
-    void draw() { if (drawer) drawer->draw(); }
-    bridge<object> *drawer;
+    void draw();
+    void compile();
 
     coordset_t triangles;
+
+  protected:
+    module_source *_msource;
+    
+  private:
+    object_compiler *compiler;
+    compiled_object *renderer;
   };
 }

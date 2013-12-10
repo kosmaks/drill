@@ -2,12 +2,13 @@
 
 #include <list>
 #include "engine/virtual/service.h"
+#include "engine/virtual/module_source.h"
 #include "view.h"
 
 namespace drill {
   class scene : public service {
   public:
-    scene();
+    scene(module_source *msource);
     virtual ~scene();
 
     void add_view(view& v);
@@ -17,5 +18,6 @@ namespace drill {
 
   private:
     std::list<view*> _views;
+    module_source *_msource;
   };
 }

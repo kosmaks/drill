@@ -6,7 +6,7 @@
 
 using namespace drill;
 
-glrenderer::glrenderer(context &cont) : renderer(cont) {
+glrenderer::glrenderer() : renderer() {
   glinit();
 }
 

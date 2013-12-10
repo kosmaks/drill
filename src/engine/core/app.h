@@ -5,6 +5,7 @@
 #include <list>
 
 #include "engine/core/errors.h"
+#include "engine/core/platform.h"
 #include "engine/virtual/service.h"
 
 #define LOG_DEBUG(x) (std::cout << __FILE__ << ":" << __LINE__ << " [.] " << x << std::endl)
@@ -13,7 +14,7 @@
 #define LOG_ERROR(x) (std::cerr << __FILE__ << ":" << __LINE__ << " [#] " << x << std::endl)
 
 namespace drill {
-  class application {
+  class application : public dependency {
   public:
     application();
     ~application();

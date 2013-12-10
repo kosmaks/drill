@@ -1,4 +1,5 @@
 #include "app.h"
+#include "engine/virtual/context.h"
 
 using namespace drill;
 

@@ -3,12 +3,17 @@
 
 using namespace drill;
 
-renderer::renderer(context &cont) {
-  current_context = &cont;
+scene empty_scene((module_source*)nullptr);
+
+renderer::renderer() {
   current_scene = &empty_scene;
 }
 
 renderer::~renderer() {
+}
+
+void renderer::defined() {
+  current_context = &REQUIRE(context);
 }
 
 void renderer::init() {

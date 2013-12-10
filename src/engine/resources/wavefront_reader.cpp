@@ -125,6 +125,4 @@ void wavefront_reader::to_object(object &dest) {
       }
     }
   }
-
-  LOG_DEBUG("Count of vertices: " << dest.triangles.count);
 }
