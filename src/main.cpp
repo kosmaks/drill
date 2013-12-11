@@ -19,7 +19,6 @@ int main() {
   drill::glmodule_source msource;
   drill::wavefront_reader reader;
 
-  platform.define<drill::application>(app);
   platform.define<drill::context>(context);
   platform.define<drill::renderer>(renderer);
   platform.define<drill::module_source>(msource);
