@@ -14,7 +14,7 @@ namespace drill {
     void add_view(view& v);
 
     // service
-    void update();
+    void update(const timeinfo_t &timeinfo);
 
   private:
     std::list<view*> _views;

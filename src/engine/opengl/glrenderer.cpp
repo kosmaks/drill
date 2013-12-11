@@ -22,8 +22,8 @@ void glrenderer::init() {
   LOG_INFO("GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
-void glrenderer::update() {
+void glrenderer::update(const timeinfo_t& timeinfo) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  renderer::update();
+  renderer::update(timeinfo);
   current_context->swap_buffers();
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ctime>
 #include <iostream>
 #include <functional>
 #include <list>
@@ -13,6 +14,7 @@
 #define LOG_ERROR(x) (std::cerr << __FILE__ << ":" << __LINE__ << " [#] " << x << std::endl)
 
 namespace drill {
+
   class application {
   public:
     application();
@@ -27,6 +29,12 @@ namespace drill {
   private:
     bool _running;
     bool _frozen;
+
+    timeinfo_t _timeinfo;
+    clock_t clocks_at_start;
+    uint32_t last_second, 
+             current_second;
+    float last_frames;
 
     std::list<service*> _services;
   };

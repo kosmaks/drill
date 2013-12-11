@@ -8,5 +8,12 @@ namespace drill {
   public:
     ~glmodule_source();
     void init();
+    void listen();
+    void run();
+
+    uint32_t current_shader_program() { return shader_program; }
+
+  private:
+    uint32_t shader_program;
   };
 }

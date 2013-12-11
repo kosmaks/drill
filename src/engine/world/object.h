@@ -20,7 +20,8 @@ namespace drill {
     module_source *_msource;
     
   private:
-    object_compiler *compiler;
-    compiled_object *renderer;
+    object_compiler *_compiler;
+    transform       *_transform;
+    compiled_object *_renderer;
   };
 }

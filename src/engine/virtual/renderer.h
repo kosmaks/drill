@@ -15,7 +15,7 @@ namespace drill {
     virtual ~renderer();
     void defined();
 
-    void update();
+    void update(const timeinfo_t &timeinfo);
 
     void use_scene(scene &new_scene);
 

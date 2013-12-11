@@ -22,6 +22,6 @@ void renderer::use_scene(scene &new_scene) {
   current_scene->init();
 }
 
-void renderer::update() {
-  current_scene->update();
+void renderer::update(const timeinfo_t &timeinfo) {
+  current_scene->update(timeinfo);
 }

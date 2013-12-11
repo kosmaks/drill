@@ -7,7 +7,7 @@ void view::init() {
   LOG_DEBUG("Initializing view");
 }
 
-void view::update() {
+void view::update(const timeinfo_t& timeinfo) {
   for (auto o : _objects) {
     o->draw();
   }

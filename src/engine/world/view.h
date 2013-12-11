@@ -13,7 +13,7 @@ namespace drill {
     bool active;
 
     void init();
-    void update();
+    void update(const timeinfo_t& timeinfo);
 
     void add_drawable(drawable &d);
 

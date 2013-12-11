@@ -23,7 +23,6 @@ glcompiled_object::glcompiled_object(uint32_t vertices, uint32_t count) : compil
 }
 
 void glcompiled_object::render() {
-  glRotatef(0.5, 1, 1, 0);
   glBindBuffer(GL_ARRAY_BUFFER, _vertices);
   glEnableClientState(GL_VERTEX_ARRAY);
   glDrawArrays(GL_TRIANGLES, 0, _count);

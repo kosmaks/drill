@@ -5,7 +5,8 @@
 namespace drill {
   class module {
   public:
-    virtual ~module() { }
-    virtual void link() = 0;
+    virtual ~module() {}
+    virtual void link() {};
+    virtual void ready() {};
   };
 }
