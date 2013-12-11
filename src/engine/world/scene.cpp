@@ -13,10 +13,10 @@ void scene::add_view(view& v) {
   v.init();
 }
 
-void scene::update() {
+void scene::update(const timeinfo_t &timeinfo) {
   for (auto v : _views) {
     if (v->active) {
-      v->update();
+      v->update(timeinfo);
     }
   }
 }

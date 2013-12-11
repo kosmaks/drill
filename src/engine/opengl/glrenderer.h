@@ -6,10 +6,10 @@
 namespace drill {
   class glrenderer : public renderer {
   public:
-    glrenderer(context &cont);
+    glrenderer();
     virtual ~glrenderer();
+    void update(const timeinfo_t& timeinfo);
 
     void init();
-    void update();
   };
 }

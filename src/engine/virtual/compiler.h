@@ -1,12 +1,20 @@
 #pragma once
 
+#include <map>
+#include "engine/core/types.h"
+#include "engine/core/platform.h"
 #include "engine/world/object.h"
 
 namespace drill {
-  class compiler {
+  class c_object { 
+    public: 
+      virtual ~c_object() {}
+      virtual void render() = 0; 
+  }; 
 
+  class compiler : public dependency {
   public:
-    void begin();
-    object end();
+    virtual ~compiler() {}
+    virtual c_object* compile(object &obj) = 0;
   };
 }

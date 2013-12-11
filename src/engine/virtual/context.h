@@ -2,9 +2,10 @@
 
 #include <string>
 #include "engine/core/events.h"
+#include "engine/core/platform.h"
 
 namespace drill {
-  class context {
+  class context : public dependency {
   public:
     virtual ~context() {}
     virtual void load() = 0;

@@ -3,16 +3,17 @@
 
 using namespace drill;
 
-renderer::renderer(context &cont) {
-  current_context = &cont;
+scene empty_scene;
+
+renderer::renderer() {
   current_scene = &empty_scene;
 }
 
 renderer::~renderer() {
 }
 
-void renderer::init() {
-  LOG_DEBUG("Loading context");
+void renderer::defined() {
+  current_context = &REQUIRE(context);
   current_context->load();
 }
 
@@ -21,6 +22,6 @@ void renderer::use_scene(scene &new_scene) {
   current_scene->init();
 }
 
-void renderer::update() {
-  current_scene->update();
+void renderer::update(const timeinfo_t &timeinfo) {
+  current_scene->update(timeinfo);
 }

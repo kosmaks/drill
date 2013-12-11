@@ -1,21 +1,16 @@
 #pragma once
 
-#include <list>
 #include "engine/virtual/service.h"
-#include "engine/virtual/drawable.h"
+#include "engine/core/platform.h"
 
 namespace drill {
   class view : public service {
   public:
-    view() : active(true) {}
+    view(platform &plat) : active(true),
+                           p(plat) {}
     bool active;
 
-    void init();
-    void update();
-
-    void add_drawable(drawable &d);
-
-  private:
-    std::list<drawable*> _objects;
+  protected:
+    platform &p;
   };
 }

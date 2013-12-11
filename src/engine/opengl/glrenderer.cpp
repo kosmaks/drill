@@ -6,7 +6,7 @@
 
 using namespace drill;
 
-glrenderer::glrenderer(context &cont) : renderer(cont) {
+glrenderer::glrenderer() : renderer() {
   glinit();
 }
 
@@ -22,8 +22,8 @@ void glrenderer::init() {
   LOG_INFO("GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
-void glrenderer::update() {
+void glrenderer::update(const timeinfo_t &timeinfo) {
   current_context->clear_screen();
-  renderer::update();
+  renderer::update(timeinfo);
   current_context->swap_buffers();
 }

@@ -7,6 +7,7 @@
 #define GL_READY 1
 
 int gl_status = GL_WAITING;
+char gl_log[4096];
 
 bool drill::glinit() {
   if (gl_status > GL_WAITING) return true;
