@@ -6,10 +6,10 @@
 namespace drill {
   class dxrenderer : public renderer {
   public:
-    dxrenderer(context &cont);
+    dxrenderer();
     virtual ~dxrenderer();
 
     void init();
-    void update();
+    void update(const timeinfo_t &timeinfo);
   };
 }

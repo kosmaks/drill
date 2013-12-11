@@ -3,7 +3,8 @@
 
 using namespace drill;
 
-dxrenderer::dxrenderer(context &cont) : renderer(cont) {
+dxrenderer::dxrenderer() : renderer() {
+  current_context = &REQUIRE(drill::context);
 }
 
 dxrenderer::~dxrenderer() {
@@ -13,8 +14,8 @@ void dxrenderer::init() {
   renderer::init();
 }
 
-void dxrenderer::update() {
+void dxrenderer::update(const timeinfo_t &timeinfo) {
   current_context->clear_screen();
-  renderer::update();
+  renderer::update(timeinfo);
   current_context->swap_buffers();
 }
