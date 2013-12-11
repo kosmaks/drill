@@ -66,6 +66,10 @@ void dxcontext::clear_screen() {
   handle.devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.4f, 0.0f, 0.0f, 1.0f));
 }
 
+template<> dxhandle_t* dxcontext::info<dxhandle_t>() {
+  return &handle;
+}
+
 void dxcontext::init_d3d() {
   LOG_INFO("Initializing DirectX");
 
