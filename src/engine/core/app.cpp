@@ -26,8 +26,6 @@ void application::run() {
   last_second = 0;
   last_frames = 0;
 
-  LOG_INFO("CPS " << clocks_at_start);
-
   _running = true;
   while (_running) {
     if (_frozen) { continue; }

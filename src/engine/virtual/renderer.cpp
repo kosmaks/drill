@@ -3,7 +3,7 @@
 
 using namespace drill;
 
-scene empty_scene((module_source*)nullptr);
+scene empty_scene;
 
 renderer::renderer() {
   current_scene = &empty_scene;

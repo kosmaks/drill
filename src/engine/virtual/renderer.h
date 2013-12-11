@@ -6,7 +6,6 @@
 #include "engine/world/scene.h"
 #include "engine/virtual/service.h"
 #include "engine/virtual/context.h"
-#include "engine/virtual/module_source.h"
 
 namespace drill {
   class renderer : public dependency, public service {
