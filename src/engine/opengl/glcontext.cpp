@@ -22,6 +22,7 @@ glcontext::glcontext(const std::string &title, int width, int height) {
 
 void glcontext::load() {
   glfwMakeContextCurrent(_window);
+  LOG_DEBUG("OpenGL context is set");
 }
 
 void glcontext::swap_buffers() {

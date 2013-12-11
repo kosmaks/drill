@@ -25,6 +25,7 @@ int main() {
   platform.define<drill::module_source>(msource);
 
   app.add_service(renderer);
+  app.add_service(msource);
 
   drill::scene scene(&msource);
   drill::view main(&msource);

@@ -14,10 +14,6 @@ renderer::~renderer() {
 
 void renderer::defined() {
   current_context = &REQUIRE(context);
-}
-
-void renderer::init() {
-  LOG_DEBUG("Loading context");
   current_context->load();
 }
 

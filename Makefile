@@ -16,11 +16,11 @@ SOURCES_DX = $(wildcard src/engine/directx/*.cpp) $(wildcard src/engine/directx/
 
 all:
 	@$(CC) -o dist/main $(CFLAGS) $(CLIBS) $(SOURCES) $(SOURCES_OGL) -I./lib -I./src -O1
-	@cp -f res/* dist
+	@cp -rf res/* dist
 	@dist/main
 
 windows:
 	@$(WC) /I.\lib /I.\src '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) $(SOURCES) $(SOURCES_OGL) $(SOURCES_DX) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
 	@rm '*.obj' -f
-	@cp -f 'res/*' dist
+	@cp -rf 'res/*' dist
 	@dist/main.exe
