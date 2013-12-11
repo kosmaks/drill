@@ -16,6 +16,9 @@ namespace drill {
     ~dxcontext();
     void load();
     void swap_buffers();
+    void clear_screen();
+    ID3D11DeviceContext *get_devcon();
+    ID3D11Device *get_device();
 
   private:
     int _width, _height;

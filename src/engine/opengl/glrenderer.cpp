@@ -23,7 +23,7 @@ void glrenderer::init() {
 }
 
 void glrenderer::update() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  current_context->clear_screen();
   renderer::update();
   current_context->swap_buffers();
 }

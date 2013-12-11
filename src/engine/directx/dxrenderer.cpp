@@ -14,6 +14,7 @@ void dxrenderer::init() {
 }
 
 void dxrenderer::update() {
+  current_context->clear_screen();
   renderer::update();
   current_context->swap_buffers();
 }

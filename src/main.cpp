@@ -21,7 +21,7 @@ int main() {
   drill::scene logo_scene;
   drill::view test;
 
-  drill::dxbridge_object bridge_object(box);
+  drill::dxbridge_object bridge_object(cont, box);
   bridge_object.compile();
   box.drawer = &bridge_object;
 

@@ -9,6 +9,7 @@ namespace drill {
     virtual ~context() {}
     virtual void load() = 0;
     virtual void swap_buffers() = 0;
+    virtual void clear_screen() = 0;
 
     event resize;
   };

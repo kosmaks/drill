@@ -59,8 +59,19 @@ void dxcontext::swap_buffers() {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
-  devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
   swapchain->Present(0, 0);
+}
+
+void dxcontext::clear_screen() {
+  devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.4f, 0.0f, 0.0f, 1.0f));
+}
+
+ID3D11DeviceContext *dxcontext::get_devcon() {
+  return devcon;
+}
+
+ID3D11Device *dxcontext::get_device() {
+  return dev;
 }
 
 void dxcontext::init_d3d() {

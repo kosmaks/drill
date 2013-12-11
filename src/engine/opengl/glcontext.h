@@ -11,6 +11,7 @@ namespace drill {
               int height=480);
     void load();
     void swap_buffers();
+    void clear_screen();
 
   private:
     GLFWwindow *_window;
