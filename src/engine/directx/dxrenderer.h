@@ -6,7 +6,6 @@
 namespace drill {
   class dxrenderer : public renderer {
   public:
-    dxrenderer();
     virtual ~dxrenderer();
 
     void init();

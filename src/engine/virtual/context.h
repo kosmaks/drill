@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "engine/core/types.h"
 #include "engine/core/events.h"
 #include "engine/core/platform.h"
 
@@ -11,6 +12,7 @@ namespace drill {
     virtual void load() = 0;
     virtual void swap_buffers() = 0;
     virtual void clear_screen() = 0;
+    template<class T> T* info();
 
     event resize;
   };

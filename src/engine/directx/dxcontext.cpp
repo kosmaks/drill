@@ -45,8 +45,8 @@ dxcontext::dxcontext(const std::string &title, int width, int height) {
 dxcontext::~dxcontext() {
   swapchain->Release();
   backbuffer->Release();
-  dev->Release();
-  devcon->Release();
+  handle.dev->Release();
+  handle.devcon->Release();
 }
 
 void dxcontext::load() {
@@ -63,15 +63,7 @@ void dxcontext::swap_buffers() {
 }
 
 void dxcontext::clear_screen() {
-  devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.4f, 0.0f, 0.0f, 1.0f));
-}
-
-ID3D11DeviceContext *dxcontext::get_devcon() {
-  return devcon;
-}
-
-ID3D11Device *dxcontext::get_device() {
-  return dev;
+  handle.devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.4f, 0.0f, 0.0f, 1.0f));
 }
 
 void dxcontext::init_d3d() {
@@ -92,16 +84,16 @@ void dxcontext::init_d3d() {
                                 D3D11_SDK_VERSION,
                                 &scd,
                                 &swapchain,
-                                &dev,
+                                &handle.dev,
                                 NULL,
-                                &devcon);
+                                &handle.devcon);
 
   LOG_DEBUG("Setting up render target");
   ID3D11Texture2D *p_back_buffer;
   swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&p_back_buffer);
-  dev->CreateRenderTargetView(p_back_buffer, NULL, &backbuffer);
+  handle.dev->CreateRenderTargetView(p_back_buffer, NULL, &backbuffer);
   p_back_buffer->Release();
-  devcon->OMSetRenderTargets(1, &backbuffer, NULL);
+  handle.devcon->OMSetRenderTargets(1, &backbuffer, NULL);
 
   LOG_DEBUG("Setting up viewport");
   D3D11_VIEWPORT viewport;
@@ -110,5 +102,5 @@ void dxcontext::init_d3d() {
   viewport.TopLeftY = 0;
   viewport.Width = _width;
   viewport.Height = _height;
-  devcon->RSSetViewports(1, &viewport);
+  handle.devcon->RSSetViewports(1, &viewport);
 }

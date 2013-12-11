@@ -3,10 +3,6 @@
 
 using namespace drill;
 
-dxrenderer::dxrenderer() : renderer() {
-  current_context = &REQUIRE(drill::context);
-}
-
 dxrenderer::~dxrenderer() {
 }
 

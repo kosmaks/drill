@@ -14,6 +14,9 @@
 #include "engine/virtual/modules/color.h"
 #include "engine/resources/wavefront_reader.h"
 
+#include "engine/directx/dxrenderer.h"
+#include "engine/directx/dxcontext.h"
+
 class my_view : public drill::view {
 public:
   my_view(drill::platform &p) : 
@@ -54,7 +57,7 @@ private:
   drill::c_object *c_box;
 };
 
-int main() {
+int main_gl() {
   LOG_INFO("Application started");
 
   // rendering
@@ -83,11 +86,36 @@ int main() {
   drill::scene scene;
   my_view my(platform);
   scene.add_view(my);
-
   renderer.use_scene(scene);
 
   app.run();
 
   LOG_INFO("Application terminated");
   return 0;
+}
+
+int main_dx() {
+  LOG_INFO("Application started");
+
+  drill::platform platform;
+  drill::application app;
+  drill::dxcontext context("Course work: drill");
+  drill::dxrenderer renderer;
+
+  platform.define<drill::context>(context);
+  platform.define<drill::renderer>(renderer);
+
+  app.add_service(renderer);
+
+  drill::scene scene;
+  renderer.use_scene(scene);
+
+  app.run();
+
+  LOG_INFO("Application terminated");
+  return 0;
+}
+
+int main() {
+  return main_dx();
 }
