@@ -14,6 +14,7 @@
 #include "engine/virtual/modules/transform.h"
 #include "engine/virtual/modules/color.h"
 #include "engine/resources/wavefront_reader.h"
+#include "engine/resources/png_reader.h"
 
 #ifdef DIRECTX
 #include "engine/directx/dxrenderer.h"
@@ -36,6 +37,9 @@ public:
     reader.to_object(box);
     c_box = compiler().compile(box);
 
+    png_reader.load_from_file("dist/texture.png");
+    texture = png_reader.to_texture();
+
     linker()
       .begin()
       .include(transform())
@@ -57,7 +61,9 @@ private:
   drill::field<drill::color> color;
 
   drill::wavefront_reader reader;
+  drill::png_reader png_reader;
   drill::object box;
+  drill::texture texture;
   drill::c_object *c_box;
 };
 

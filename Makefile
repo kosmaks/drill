@@ -10,17 +10,18 @@ WLINKS = opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.li
 
 SOURCES = $(wildcard src/*.cpp) $(wildcard src/engine/core/*.cpp) \
 				 	$(wildcard src/engine/virtual/*.cpp) $(wildcard src/engine/world/*.cpp) \
-					$(wildcard src/engine/resources/*.cpp) $(wildcard src/engine/virtual/modules/*.cpp)
+					$(wildcard src/engine/resources/*.cpp) $(wildcard src/engine/virtual/modules/*.cpp) \
+					$(wildcard src/external/*.cpp)
 SOURCES_OGL = $(wildcard src/engine/opengl/*.cpp) $(wildcard src/engine/opengl/modules/*.cpp)
 SOURCES_DX = $(wildcard src/engine/directx/*.cpp) $(wildcard src/engine/directx/modules/*.cpp)
 
 all:
-	@$(CC) -o dist/main $(CFLAGS) $(CLIBS) $(SOURCES) $(SOURCES_OGL) -I./lib -I./src -O1
+	@$(CC) -o dist/main $(CFLAGS) $(CLIBS) $(SOURCES) $(SOURCES_OGL) -I./lib -I./src -I./src/external -O1
 	@cp -rf res/* dist
 	@dist/main
 
 windows:
-	@$(WC) /I.\lib /I.\src '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) $(SOURCES) $(SOURCES_DX) $(SOURCES_OGL) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
+	$(WC) /I.\lib /I.\src /I.\src\external '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) $(SOURCES) $(SOURCES_DX) $(SOURCES_OGL) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
 	@rm '*.obj' -f
 	@cp -rf 'res/*' dist
 	@dist/main.exe
