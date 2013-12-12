@@ -9,10 +9,7 @@ namespace drill {
   public:
     scene(platform &p);
     virtual ~scene();
-
     void add_service(service* s);
-
-    // service
     void update(const timeinfo_t &timeinfo);
 
     platform &c_platform;
