@@ -49,6 +49,8 @@ public:
 
   void update(const drill::timeinfo_t &time) {
     linker()
+      .update(transform().model_scale({ 0.995, 1.0, 1.0})
+                         .model_rotate({ 1.0 , 0.0 , 0.0, 0.2 }))
       .update(color().red(1.0))
       .use();
     c_box->render();

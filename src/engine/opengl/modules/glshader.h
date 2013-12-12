@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GLM/glm.hpp>
 #include "engine/core/types.h"
 #include "engine/virtual/module.h"
 #include "../gllinker.h"
@@ -23,5 +24,6 @@ namespace drill {
     void pass_param(const std::string &name, const vector2_t &value);
     void pass_param(const std::string &name, const vector3_t &value);
     void pass_param(const std::string &name, const vector4_t &value);
+    void pass_param(const std::string &name, const glm::mat4 &value);
   };
 }

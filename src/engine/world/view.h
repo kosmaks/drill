@@ -9,7 +9,7 @@ namespace drill {
   public:
     view() {}
 
-    scene &get_scene() { return *c_scene; }
+    inline scene &get_scene() { return *c_scene; }
     void set_scene(scene &s);
 
   protected:

@@ -44,3 +44,7 @@ void glshader::pass_param(const std::string &name, const vector3_t &value) {
 void glshader::pass_param(const std::string &name, const vector2_t &value) {
   glUniform2fv(glGetUniformLocation(prog_id, name.c_str()), 1, (const float*)&value);
 }
+
+void glshader::pass_param(const std::string &name, const glm::mat4 &value) {
+  glUniformMatrix4fv(glGetUniformLocation(prog_id, name.c_str()), 1, false, (const float*)&value);
+}

@@ -46,4 +46,8 @@ namespace drill {
     }
   } coordset_t;
 
+  typedef struct {
+    vector4_t rows[4];
+    vector4_t& operator[](int i) { return rows[i]; }
+  } matrix4x4_t;
 }
