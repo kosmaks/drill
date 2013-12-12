@@ -9,5 +9,9 @@ namespace drill {
     void init();
     void link_to(linker *l) { _link_to(l); }
     void defined();
+    void ready();
+
+  private:
+    ID3D11Buffer *buffer;
   };
 }

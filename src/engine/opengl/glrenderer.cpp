@@ -20,6 +20,8 @@ void glrenderer::init() {
   glewInit();
   LOG_INFO("OpenGL version: " << glGetString(GL_VERSION));
   LOG_INFO("GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void glrenderer::update(const timeinfo_t &timeinfo) {

@@ -111,4 +111,22 @@ void dxcontext::init_d3d() {
   viewport.Width = _width;
   viewport.Height = _height;
   handle.devcon->RSSetViewports(1, &viewport);
+
+  LOG_DEBUG("Setting up rastarizer");
+  D3D11_RASTERIZER_DESC rasterizerState;
+  ZeroMemory(&rasterizerState, sizeof(D3D11_RASTERIZER_DESC));
+  rasterizerState.CullMode = D3D11_CULL_BACK;
+  rasterizerState.FillMode = D3D11_FILL_WIREFRAME;
+  rasterizerState.FrontCounterClockwise = true;
+  rasterizerState.DepthBias = false;
+  rasterizerState.DepthBiasClamp = 0;
+  rasterizerState.SlopeScaledDepthBias = 0;
+  rasterizerState.DepthClipEnable = true;
+  rasterizerState.ScissorEnable = false;
+  rasterizerState.MultisampleEnable = false;
+  rasterizerState.AntialiasedLineEnable = true;
+
+  ID3D11RasterizerState *pRS;
+  handle.dev->CreateRasterizerState(&rasterizerState, &pRS);
+  handle.devcon->RSSetState(pRS);
 }

@@ -32,7 +32,7 @@ public:
     transform = require<drill::transform>();
     color = require<drill::color>();
 
-    reader.load_from_file("dist/box.obj");
+    reader.load_from_file("dist/wbox.obj");
     reader.to_object(box);
     c_box = compiler().compile(box);
 
@@ -68,7 +68,7 @@ int main() {
 
 #ifdef DIRECTX
   drill::platform dxplatform;
-  drill::dxcontext dxcontext("Course work: drill");
+  drill::dxcontext dxcontext("Course work: DirectX");
   drill::dxrenderer dxrenderer;
   drill::dxcompiler dxcompiler;
   drill::dxlinker dxlinker;
@@ -87,14 +87,15 @@ int main() {
   dxtransform.init();
   dxcolor.init();
 
-  drill::scene dxscene;
-  my_view dxmy(dxplatform);
-  dxscene.add_view(dxmy);
+  my_view dxmy;
+  drill::scene dxscene(dxplatform);
   dxrenderer.use_scene(dxscene);
+  dxmy.set_scene(dxscene);
+
 #endif
 
   drill::platform glplatform;
-  drill::glcontext glcontext("Course work: drill");
+  drill::glcontext glcontext("Course work: OpenGL");
   drill::glrenderer glrenderer;
   drill::glcompiler glcompiler;
   drill::gllinker gllinker;
@@ -115,7 +116,6 @@ int main() {
 
   my_view glmy;
   drill::scene glscene(glplatform);
-
   glrenderer.use_scene(glscene);
   glmy.set_scene(glscene);
 

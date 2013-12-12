@@ -21,7 +21,6 @@ c_object *dxcompiler::compile(object &obj) {
 
   D3D11_BUFFER_DESC bd;
   ZeroMemory(&bd, sizeof(bd));
-
   bd.Usage = D3D11_USAGE_DYNAMIC;
   bd.ByteWidth = sizeof(vector3_t) * obj.triangles.count;
   bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;

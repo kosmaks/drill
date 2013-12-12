@@ -12,6 +12,10 @@
 #define INCLUDE(x) (current_platform->include<x>())
 #define REQUIRE(x) (current_platform->require<x>())
 
+#ifdef NOEXCEPT
+#define noexcept
+#endif
+
 namespace drill {
   struct unresolved_dependency_exception : std::exception {
   public:
