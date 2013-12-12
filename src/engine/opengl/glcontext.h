@@ -12,6 +12,9 @@ namespace drill {
     void load();
     void swap_buffers();
     void clear_screen();
+    void defined() {}
+
+    virtual void* info(size_t hash) { return nullptr; }
 
   private:
     GLFWwindow *_window;

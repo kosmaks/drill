@@ -9,6 +9,7 @@ namespace drill {
     void init();
     void link_to(linker *l) { glshader::link_to(l); }
     void ready();
+    void defined() {}
   };
 }
 

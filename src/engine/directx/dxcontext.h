@@ -1,10 +1,6 @@
 #pragma once
 
-#include <windows.h>
-#include <windowsx.h>
-#include <d3d11.h>
-#include <d3dx11.h>
-#include <d3dx10.h>
+#include "dxheaders.h"
 #include "engine/virtual/context.h"
 
 namespace drill {
@@ -22,7 +18,9 @@ namespace drill {
     void load();
     void swap_buffers();
     void clear_screen();
-    template<class T> T* info();
+    void defined() {}
+
+    void* info(size_t hash);
 
   private:
     int _width, _height;

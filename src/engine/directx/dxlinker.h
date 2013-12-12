@@ -3,7 +3,7 @@
 #include "engine/virtual/linker.h"
 
 namespace drill {
-  class gllinker : public linker {
+  class dxlinker : public linker {
   public:
     linker& begin();
     linker& include(module &m);
@@ -11,12 +11,8 @@ namespace drill {
     linker& use();
 
     linker& operator<<(module &m);
+
     void defined() {}
-
-    uint32_t c_shader_program();
-
-  private:
-    uint32_t shader_program;
   };
 }
 

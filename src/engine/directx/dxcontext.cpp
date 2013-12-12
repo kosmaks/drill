@@ -63,11 +63,15 @@ void dxcontext::swap_buffers() {
 }
 
 void dxcontext::clear_screen() {
-  handle.devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.4f, 0.0f, 0.0f, 1.0f));
+  handle.devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
-template<> dxhandle_t* dxcontext::info<dxhandle_t>() {
-  return &handle;
+void* dxcontext::info(size_t hash) {
+  if (hash == typeid(dxhandle_t).hash_code()) {
+    return &handle;
+  } else {
+    return nullptr;
+  }
 }
 
 void dxcontext::init_d3d() {

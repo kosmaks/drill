@@ -24,3 +24,9 @@ windows:
 	@rm '*.obj' -f
 	@cp -rf 'res/*' dist
 	@dist/main.exe
+
+test:
+	@$(WC) /I.\lib /I.\src '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) test.cpp $(WLIBS) /link /out:dist\main.exe $(WLINKS)
+	@rm '*.obj' -f
+	@cp -rf 'res/*' dist
+	@dist/main.exe

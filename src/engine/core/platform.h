@@ -26,7 +26,7 @@ namespace drill {
   class dependency { 
   public: 
     platform *current_platform; 
-    virtual void defined() {}
+    virtual void defined() = 0;
   };
 
   class platform {

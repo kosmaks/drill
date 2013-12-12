@@ -11,6 +11,6 @@ namespace drill {
     virtual ~module() {}
     virtual void init() = 0;
     virtual void link_to(linker *l) = 0;
-    virtual void ready() {};
+    virtual void ready() {}
   };
 }
