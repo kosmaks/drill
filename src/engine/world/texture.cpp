@@ -1,4 +1,4 @@
-#include <memory>
+#include <memory.h>
 #include "texture.h"
 
 using namespace drill;

@@ -12,6 +12,5 @@ void png_reader::load_from_file(const std::string &path) {
 }
 
 texture png_reader::to_texture() {
-  vector2_t size = { width, height };
   return texture(texture::TEXTURE_RGBA, width, height, &_buffer[0]);
 }
