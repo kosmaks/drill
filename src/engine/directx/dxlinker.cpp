@@ -19,7 +19,7 @@ linker& dxlinker::use() {
   return *this;
 }
 
-linker& dxlinker::operator<<(module &m) {
+linker& dxlinker::update(module &m) {
   m.ready();
   return *this;
 }

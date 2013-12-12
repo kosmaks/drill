@@ -27,7 +27,7 @@ linker& gllinker::use() {
   return *this;
 }
 
-linker& gllinker::operator<<(module &m) {
+linker& gllinker::update(module &m) {
   m.ready();
   return *this;
 }

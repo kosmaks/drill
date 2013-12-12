@@ -12,6 +12,6 @@ namespace drill {
     virtual linker& include(module &m) = 0;
     virtual linker& end() = 0;
     virtual linker& use() = 0;
-    virtual linker& operator<<(module &m) = 0;
+    virtual linker& update(module &m) = 0;
   };
 }

@@ -2,21 +2,19 @@
 
 using namespace drill;
 
-scene::scene() {
+scene::scene(platform &p) : c_platform(p) {
 }
 
 scene::~scene() {
 }
 
-void scene::add_view(view& v) {
-  _views.push_back(&v);
-  v.init();
+void scene::add_service(service* s) {
+  _services.push_back(s);
+  s->init();
 }
 
 void scene::update(const timeinfo_t &timeinfo) {
-  for (auto v : _views) {
-    if (v->active) {
-      v->update(timeinfo);
-    }
+  for (auto s : _services) {
+    s->update(timeinfo);
   }
 }

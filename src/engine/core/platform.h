@@ -16,7 +16,7 @@ namespace drill {
   struct unresolved_dependency_exception : std::exception {
   public:
     unresolved_dependency_exception(const char *name) : _name(name) {}
-    const char *what() const { return _name; }
+    const char *what() const noexcept { return _name; }
   private:
     const char *_name;
   };

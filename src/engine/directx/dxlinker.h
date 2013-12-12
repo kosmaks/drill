@@ -10,7 +10,7 @@ namespace drill {
     linker& end();
     linker& use();
 
-    linker& operator<<(module &m);
+    linker& update(module &m);
 
     void defined() {}
   };

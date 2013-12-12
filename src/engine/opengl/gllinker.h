@@ -10,7 +10,7 @@ namespace drill {
     linker& end();
     linker& use();
 
-    linker& operator<<(module &m);
+    linker& update(module &m);
     void defined() {}
 
     uint32_t c_shader_program();

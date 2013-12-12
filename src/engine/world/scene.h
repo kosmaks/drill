@@ -1,21 +1,23 @@
 #pragma once
 
 #include <list>
+#include "engine/core/platform.h"
 #include "engine/virtual/service.h"
-#include "view.h"
 
 namespace drill {
   class scene : public service {
   public:
-    scene();
+    scene(platform &p);
     virtual ~scene();
 
-    void add_view(view& v);
+    void add_service(service* s);
 
     // service
     void update(const timeinfo_t &timeinfo);
 
+    platform &c_platform;
+
   private:
-    std::list<view*> _views;
+    std::list<service*> _services;
   };
 }
