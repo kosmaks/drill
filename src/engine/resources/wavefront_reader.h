@@ -16,6 +16,6 @@ namespace drill {
     std::vector<vector3_t> _vertices;
     std::vector<vector3_t> _normals;
     std::vector<vector2_t> _textures;
-    std::list<std::list<vector3_t>> _faces;
+    std::list<std::list<vector3i_t>> _faces;
   };
 }

@@ -21,7 +21,7 @@ all:
 	@dist/main
 
 windows:
-	$(WC) /I.\lib /I.\src /I.\src\external '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) $(SOURCES) $(SOURCES_DX) $(SOURCES_OGL) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
+	$(WC) /O2 /I.\lib /I.\src /I.\src\external '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) $(SOURCES) $(SOURCES_DX) $(SOURCES_OGL) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
 	@rm '*.obj' -f
 	@cp -rf 'res/*' dist
 	@dist/main.exe

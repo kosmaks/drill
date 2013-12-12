@@ -11,8 +11,8 @@
 
 using namespace drill;
 
-vector3_t parse_face(std::string &mem) {
-  vector3_t storage = { 0, 0, 0 };
+vector3i_t parse_face(std::string &mem) {
+  vector3i_t storage = { 0, 0, 0 };
   std::replace_if(mem.begin(), mem.end(), [](int x) { return x == '/'; }, ' ');
   std::stringstream stream(mem);
   stream >> storage.x;
@@ -61,7 +61,7 @@ void wavefront_reader::load_from_file(const std::string &path) {
 
       case COMMAND:
         state = (mem == "v")    ? READ_VERTEX :
-                (mem == "t")    ? READ_TEXTURE :
+                (mem == "vt")   ? READ_TEXTURE :
                 (mem == "vn")   ? READ_NORMAL :
                 (mem == "f")    ? READ_FACE :
                 (mem == "\n" || 
@@ -97,7 +97,7 @@ void wavefront_reader::load_from_file(const std::string &path) {
         getline(stream, mem);
         std::stringstream facestr(mem);
         std::string temp;
-        std::list<vector3_t> face;
+        std::list<vector3i_t> face;
         while (facestr.rdbuf()->in_avail()) {
           facestr >> temp;
           face.push_back(parse_face(temp));
@@ -113,15 +113,23 @@ void wavefront_reader::load_from_file(const std::string &path) {
 
 void wavefront_reader::to_object(object &dest) {
   dest.triangles.count = 3 * std::count_if(_faces.begin(), _faces.end(), 
-      [](std::list<vector3_t>& vec) { return vec.size() == 3; });
+      [](std::list<vector3i_t>& vec) { return vec.size() == 3; });
+
   dest.triangles.vertices = new vector3_t[dest.triangles.count];
+  dest.triangles.textures = new vector2_t[dest.triangles.count];
+  dest.triangles.normals  = new vector3_t[dest.triangles.count];
+
+  vector2_t zero2 = { 0, 0 };
+  vector3_t zero3 = { 0, 0, 0 };
   
   uint32_t i = 0;
-  for (std::list<vector3_t>& vec : _faces) {
+  for (std::list<vector3i_t>& vec : _faces) {
     if (vec.size() == 3) {
-      for (vector3_t& descr : vec) {
-        vector3_t &vert = _vertices[descr.x-1];
-        dest.triangles.vertices[i++] = vert;
+      for (vector3i_t& descr : vec) {
+        dest.triangles.vertices[i] = _vertices[descr.x-1];
+        dest.triangles.textures[i] = (descr.y > 0) ? _textures[descr.y-1] : zero2;
+        dest.triangles.normals[i] = (descr.z > 0) ? _normals[descr.z-1] : zero3;
+        i += 1;
       }
     }
   }

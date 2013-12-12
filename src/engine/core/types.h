@@ -30,6 +30,11 @@ namespace drill {
   } vector4_t;
 
   typedef struct {
+    uint32_t x, y, z;
+    uint32_t operator[](int i) { return ((coord_t*)this)[i]; }
+  } vector3i_t;
+
+  typedef struct {
     vector3_t *vertices, *normals;
     vector2_t *textures;
     uint32_t count;
