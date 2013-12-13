@@ -54,16 +54,16 @@ void dxcontext::load() {
   init_d3d();
 }
 
-void dxcontext::swap_buffers() {
+void dxcontext::clear_screen() {
   if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
-  swapchain->Present(0, 0);
+  handle.devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
-void dxcontext::clear_screen() {
-  handle.devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+void dxcontext::swap_buffers() {
+  swapchain->Present(0, 0);
 }
 
 void* dxcontext::info(size_t hash) {
@@ -79,11 +79,20 @@ void dxcontext::init_d3d() {
 
   DXGI_SWAP_CHAIN_DESC scd;
   ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
-  scd.BufferCount = 1;
+
+  scd.BufferCount = 2;
+  scd.BufferDesc.Width = _width;                          // use 32-bit color
+  scd.BufferDesc.Height = _height;                        // use 32-bit color
   scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;     // use 32-bit color
   scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;      // how swap chain is to be used
+
+  scd.BufferDesc.RefreshRate.Denominator = 20;             // refresh rate from
+  scd.BufferDesc.RefreshRate.Numerator = 60;              // to
+
+  scd.SampleDesc.Quality = 0;
+  scd.SampleDesc.Count = 1;                               // how many multisamples
+
   scd.OutputWindow = h_wnd;                               // the window to be used
-  scd.SampleDesc.Count = 4;                               // how many multisamples
   scd.Windowed = true;                                    // windowed/full-screen mode
 
   D3D11CreateDeviceAndSwapChain(NULL,
@@ -110,18 +119,20 @@ void dxcontext::init_d3d() {
   viewport.TopLeftY = 0;
   viewport.Width = _width;
   viewport.Height = _height;
+  viewport.MinDepth = 0.0f;
+  viewport.MaxDepth = 1.0f;
   handle.devcon->RSSetViewports(1, &viewport);
 
   LOG_DEBUG("Setting up rastarizer");
   D3D11_RASTERIZER_DESC rasterizerState;
   ZeroMemory(&rasterizerState, sizeof(D3D11_RASTERIZER_DESC));
-  rasterizerState.CullMode = D3D11_CULL_BACK;
+  rasterizerState.CullMode = D3D11_CULL_NONE;
   rasterizerState.FillMode = D3D11_FILL_WIREFRAME;
   rasterizerState.FrontCounterClockwise = true;
   rasterizerState.DepthBias = false;
   rasterizerState.DepthBiasClamp = 0;
   rasterizerState.SlopeScaledDepthBias = 0;
-  rasterizerState.DepthClipEnable = true;
+  rasterizerState.DepthClipEnable = false;
   rasterizerState.ScissorEnable = false;
   rasterizerState.MultisampleEnable = false;
   rasterizerState.AntialiasedLineEnable = true;

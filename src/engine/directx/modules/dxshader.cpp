@@ -5,6 +5,7 @@ using namespace drill;
 
 void dxshader::_link_to(linker *l) {
   if (type == DXSHADER_VERTEX) {
+    LOG_DEBUG("here");
     handle->devcon->VSSetShader(pVS, 0, 0);
     D3D11_INPUT_ELEMENT_DESC ied[] = {
       { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
@@ -25,8 +26,12 @@ void dxshader::compile(const std::string &path, dxshader::type_t type) {
                         (type == DXSHADER_VERTEX) ? "VShader" : "PShader", 
                         (type == DXSHADER_VERTEX) ? "vs_5_0" : "ps_5_0",
                         0, 0, 0,
-                        &blob,
-                        0, 0);
+                        &blob, &error, 0);
+
+  if (error) {
+    LOG_DEBUG("Error compiling shader: " << ((char*)error->GetBufferPointer()));
+    return;
+  }
 
   if (type == DXSHADER_VERTEX) {
     handle->dev->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &pVS);

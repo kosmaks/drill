@@ -24,7 +24,7 @@ void glrenderer::init() {
 
   glEnable(GL_DEPTH_TEST); // enable depth-testing
   glDepthFunc(GL_LESS);
-  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void glrenderer::update(const timeinfo_t &timeinfo) {

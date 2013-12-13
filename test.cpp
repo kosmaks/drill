@@ -37,6 +37,13 @@ void InitPipeline(void);    // loads and prepares the shaders
 // the WindowProc function prototype
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+    typedef struct {
+      D3DXMATRIX m_model,
+                 m_projection,
+                 m_view;
+    } state_t;
+    state_t state;
+    ID3D11Buffer *buffer;
 
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -189,6 +196,23 @@ void RenderFrame(void)
     // clear the back buffer to a deep blue
     devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.2f, 0.4f, 1.0f));
 
+  D3DXMATRIX rotate, product;
+  D3DXVECTOR3 vec = { 1.0, 0.0, 0.0 };
+  D3DXMatrixRotationAxis(&rotate, &vec, 3.14 * 0.5 / 180);
+  D3DXMatrixMultiply(&product, &state.m_model, &rotate);
+  state.m_model = product;
+
+    D3D11_MAPPED_SUBRESOURCE ms;
+    devcon->Map(buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
+    state_t *s = (state_t*)ms.pData;
+    s->m_model = state.m_model;
+    s->m_projection = state.m_projection;
+    s->m_view = state.m_view;
+    devcon->Unmap(buffer, NULL);
+
+    ID3D11Buffer *buffers[] = { buffer };
+    devcon->VSSetConstantBuffers(0, 1, &buffer);
+
         // select which vertex buffer to display
         UINT stride = sizeof(VERTEX);
         UINT offset = 0;
@@ -256,6 +280,16 @@ void InitGraphics()
 // this function loads and prepares the shaders
 void InitPipeline()
 {
+  D3D11_BUFFER_DESC bd;
+  ZeroMemory(&bd, sizeof(bd));
+  bd.Usage = D3D11_USAGE_DYNAMIC;
+  bd.ByteWidth = sizeof(state_t);
+  bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+  bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+  dev->CreateBuffer(&bd, NULL, &buffer);
+
+  D3DXMatrixIdentity(&state.m_model);
+
     // load and compile the two shaders
     ID3D10Blob *VS, *PS;
     D3DX11CompileFromFile("src/shaders.hlsl", 0, 0, "VShader", "vs_5_0", 0, 0, 0, &VS, 0, 0);

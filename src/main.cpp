@@ -1,12 +1,7 @@
+#include <cmath>
 #include "engine/core/app.h"
 #include "engine/core/field.h"
 #include "engine/core/platform.h"
-#include "engine/opengl/glrenderer.h"
-#include "engine/opengl/glcontext.h"
-#include "engine/opengl/glcompiler.h"
-#include "engine/opengl/gllinker.h"
-#include "engine/opengl/modules/gltransform.h"
-#include "engine/opengl/modules/glcolor.h"
 #include "engine/world/scene.h"
 #include "engine/world/view.h"
 #include "engine/world/primitives.h"
@@ -15,6 +10,15 @@
 #include "engine/virtual/modules/color.h"
 #include "engine/resources/wavefront_reader.h"
 #include "engine/resources/png_reader.h"
+
+#ifdef OPENGL
+#include "engine/opengl/glrenderer.h"
+#include "engine/opengl/glcontext.h"
+#include "engine/opengl/glcompiler.h"
+#include "engine/opengl/gllinker.h"
+#include "engine/opengl/modules/gltransform.h"
+#include "engine/opengl/modules/glcolor.h"
+#endif
 
 #ifdef DIRECTX
 #include "engine/directx/dxrenderer.h"
@@ -49,9 +53,12 @@ public:
 
   void update(const drill::timeinfo_t &time) {
     linker()
-      .update(transform().model_scale({ 0.995, 1.0, 1.0})
-                         .model_rotate({ 1.0 , 0.0 , 0.0, 0.2 }))
-      .update(color().red(1.0))
+      .update(transform().model_identity()
+                         .model_translate({ 0.5, 0.0, 0.0 })
+                         .model_scale({ 0.5, 1.0, 1.0 })
+                         .model_rotate({ 0.0, 1.0, 0.0, 60 })
+                         .model_rotate({ 1.0, 0.0, 0.0, 30 }))
+      .update(color().set({ 1.0, 0.5, 0.0, 1.0 }))
       .use();
     c_box->render();
   }
@@ -99,9 +106,9 @@ int main() {
   drill::scene dxscene(dxplatform);
   dxrenderer.use_scene(dxscene);
   dxmy.set_scene(dxscene);
-
 #endif
 
+#ifdef OPENGL
   drill::platform glplatform;
   drill::glcontext glcontext("Course work: OpenGL");
   drill::glrenderer glrenderer;
@@ -126,6 +133,7 @@ int main() {
   drill::scene glscene(glplatform);
   glrenderer.use_scene(glscene);
   glmy.set_scene(glscene);
+#endif
 
   app.run();
 
