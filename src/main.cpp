@@ -29,6 +29,7 @@
 #include "engine/directx/dxlinker.h"
 #include "engine/directx/modules/dxtransform.h"
 #include "engine/directx/modules/dxcolor.h"
+#include "engine/directx/modules/dxmaterial.h"
 #endif
 
 class my_view : public drill::view {
@@ -98,6 +99,7 @@ int main() {
   drill::dxlinker dxlinker;
   drill::dxtransform dxtransform;
   drill::dxcolor dxcolor;
+  drill::dxmaterial dxmaterial;
 
   dxplatform.define<drill::context>(dxcontext);
   dxplatform.define<drill::renderer>(dxrenderer);
@@ -105,11 +107,13 @@ int main() {
   dxplatform.define<drill::linker>(dxlinker);
   dxplatform.define<drill::transform>(dxtransform);
   dxplatform.define<drill::color>(dxcolor);
+  dxplatform.define<drill::material>(dxmaterial);
 
   app.add_service(dxrenderer);
 
   dxtransform.init();
   dxcolor.init();
+  dxmaterial.init();
 
   my_view dxmy;
   drill::scene dxscene(dxplatform);
@@ -132,6 +136,7 @@ int main() {
   glplatform.define<drill::compiler>(glcompiler);
   glplatform.define<drill::linker>(gllinker);
   glplatform.define<drill::transform>(gltransform);
+  glplatform.define<drill::color>(glcolor);
   glplatform.define<drill::material>(glmaterial);
 
   app.add_service(glrenderer);

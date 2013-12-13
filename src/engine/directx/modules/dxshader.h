@@ -23,7 +23,7 @@ namespace drill {
     type_t type;
 
     virtual void _link_to(linker *l);
-    void compile(const std::string &path, type_t type);
+    void compile(const std::string &path, const std::string &entry, type_t type);
   };
 }
 

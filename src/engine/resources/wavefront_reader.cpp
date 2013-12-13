@@ -140,6 +140,7 @@ object wavefront_reader::to_object() {
       }
     }
   }
-  
+
+  obj.transfer_ownership();
   return obj;
 }

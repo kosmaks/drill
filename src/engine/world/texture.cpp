@@ -19,16 +19,23 @@ texture::texture(texture::format_t format,
     _width = 0;
     _height = 0;
   }
+  _transfered_ownership = false;
 }
 
 texture::texture() {
   _data = nullptr;
   _width = 0;
   _height = 0;
+  _transfered_ownership = false;
+}
+
+uint8_t *texture::transfer_ownership() {
+  _transfered_ownership = true;
+  return _data;
 }
 
 texture::~texture() {
-  if (_data) {
+  if (_data != nullptr && !_transfered_ownership) {
     delete[] _data;
   }
 }

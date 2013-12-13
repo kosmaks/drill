@@ -12,5 +12,7 @@ void png_reader::load_from_file(const std::string &path) {
 }
 
 texture png_reader::to_texture() {
-  return texture(texture::TEXTURE_RGBA, width, height, &_buffer[0]);
+  texture tex(texture::TEXTURE_RGBA, width, height, &_buffer[0]);
+  tex.transfer_ownership();
+  return tex;
 }

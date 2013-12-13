@@ -10,7 +10,7 @@ void dxtransform::defined() {
 }
 
 void dxtransform::init() {
-  compile(CFG_DX_TRANSFORM_VS_PATH, DXSHADER_VERTEX);
+  compile(CFG_DX_TRANSFORM_VS_PATH, "VSTransform", DXSHADER_VERTEX);
 
   model_identity();
   projection_identity();

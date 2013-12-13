@@ -5,31 +5,37 @@ using namespace drill;
 
 void dxshader::_link_to(linker *l) {
   if (type == DXSHADER_VERTEX) {
-    LOG_DEBUG("here");
     handle->devcon->VSSetShader(pVS, 0, 0);
+
     D3D11_INPUT_ELEMENT_DESC ied[] = {
-      { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+      { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+      { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+      { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
-    handle->dev->CreateInputLayout(ied, 1, blob->GetBufferPointer(), blob->GetBufferSize(), &layout);
+
+    handle->dev->CreateInputLayout(ied, 3, blob->GetBufferPointer(), blob->GetBufferSize(), &layout);
     handle->devcon->IASetInputLayout(layout);
   } else {
     handle->devcon->PSSetShader(pPS, 0, 0);
   }
 }
 
-void dxshader::compile(const std::string &path, dxshader::type_t type) {
+void dxshader::compile(const std::string &path, const std::string &entry, dxshader::type_t type) {
   LOG_DEBUG("Compiling shader '" << path << "'");
 
   this->type = type;
-  D3DX11CompileFromFile(path.c_str(), 
+  if (FAILED(D3DX11CompileFromFile(path.c_str(), 
                         0, 0, 
-                        (type == DXSHADER_VERTEX) ? "VShader" : "PShader", 
+                        entry.c_str(),
                         (type == DXSHADER_VERTEX) ? "vs_5_0" : "ps_5_0",
                         0, 0, 0,
-                        &blob, &error, 0);
+                        &blob, &error, 0))) {
+    LOG_ERROR("Error compiling shader!");
+    return;
+  }
 
   if (error) {
-    LOG_DEBUG("Error compiling shader: " << ((char*)error->GetBufferPointer()));
+    LOG_ERROR("Error compiling shader: " << ((char*)error->GetBufferPointer()));
     return;
   }
 

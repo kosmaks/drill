@@ -21,9 +21,12 @@ namespace drill {
     inline uint32_t get_height() const { return _height; }
     inline format_t get_format() const { return _format; }
 
+    uint8_t* transfer_ownership();
+
   private:
     uint8_t *_data;
     uint32_t _width, _height;
     format_t _format;
+    bool _transfered_ownership;
   };
 }
