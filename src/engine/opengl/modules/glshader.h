@@ -21,6 +21,7 @@ namespace drill {
 
     void compile(const std::string &source, type_t type);
     void pass_param(const std::string &name, float value);
+    void pass_param(const std::string &name, uint32_t value);
     void pass_param(const std::string &name, const vector2_t &value);
     void pass_param(const std::string &name, const vector3_t &value);
     void pass_param(const std::string &name, const vector4_t &value);

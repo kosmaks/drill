@@ -33,6 +33,10 @@ void glshader::pass_param(const std::string &name, float value) {
   glUniform1f(glGetUniformLocation(prog_id, name.c_str()), value);
 }
 
+void glshader::pass_param(const std::string &name, uint32_t value) {
+  glUniform1i(glGetUniformLocation(prog_id, name.c_str()), value);
+}
+
 void glshader::pass_param(const std::string &name, const vector4_t &value) {
   glUniform4fv(glGetUniformLocation(prog_id, name.c_str()), 1, (const float*)&value);
 }

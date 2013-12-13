@@ -16,10 +16,10 @@ namespace drill {
     texture(format_t format, uint32_t width, uint32_t height, const uint8_t *data);
     ~texture();
 
-    inline const uint8_t* get_data() { return _data; }
-    inline uint32_t get_width() { return _width; }
-    inline uint32_t get_height() { return _height; }
-    inline format_t get_format() { return _format; }
+    inline const uint8_t* get_data() const { return _data; }
+    inline uint32_t get_width() const { return _width; }
+    inline uint32_t get_height() const { return _height; }
+    inline format_t get_format() const { return _format; }
 
   private:
     uint8_t *_data;

@@ -26,6 +26,7 @@ c_object* glcompiler::compile(object &obj) {
 void glc_object::render() {
   glBindBuffer(GL_ARRAY_BUFFER, vertices);
   glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
   glDrawArrays(GL_TRIANGLES, 0, count);
 }
@@ -36,6 +37,7 @@ uint32_t glcompiler::generate_vbo(vertex_t *pointer, uint32_t size) {
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, size, pointer, GL_STATIC_DRAW);
   glVertexPointer(3, GL_FLOAT, sizeof(vertex_t), (void*)0);
+  glTexCoordPointer(2, GL_FLOAT, sizeof(vertex_t), (void*)(3 * sizeof(float)));
   glNormalPointer(GL_FLOAT, sizeof(vertex_t), (void*)(5 * sizeof(float)));
   return vbo;
 }

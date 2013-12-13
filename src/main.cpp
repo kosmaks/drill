@@ -8,6 +8,7 @@
 #include "engine/virtual/compiler.h"
 #include "engine/virtual/modules/transform.h"
 #include "engine/virtual/modules/color.h"
+#include "engine/virtual/modules/material.h"
 #include "engine/resources/wavefront_reader.h"
 #include "engine/resources/png_reader.h"
 
@@ -18,6 +19,7 @@
 #include "engine/opengl/gllinker.h"
 #include "engine/opengl/modules/gltransform.h"
 #include "engine/opengl/modules/glcolor.h"
+#include "engine/opengl/modules/glmaterial.h"
 #endif
 
 #ifdef DIRECTX
@@ -35,20 +37,21 @@ public:
     compiler = require<drill::compiler>();
     linker = require<drill::linker>();
     transform = require<drill::transform>();
-    color = require<drill::color>();
+    material = require<drill::material>();
 
-    reader.load_from_file("dist/bit.obj");
+    reader.load_from_file("dist/wbox.obj");
     LOG_INFO("loading from object");
     box = reader.to_object();
     c_box = compiler().compile(box);
 
     png_reader.load_from_file("dist/texture.png");
     texture = png_reader.to_texture();
+    material().use_texture(texture);
 
     linker()
       .begin()
       .include(transform())
-      .include(color())
+      .include(material())
       .end();
 
     angle = 1;
@@ -57,9 +60,11 @@ public:
   void update(const drill::timeinfo_t &time) {
     linker()
       .update(transform().model_identity()
-                         .model_scale({ 0.03, 0.03, 0.03 })
+                         .projection_identity()
+                         //.model_scale({ 0.035, 0.035, 0.035 })
+                         .projection_rotate({ 1.0, 0.0, 0.0, -30 })
                          .model_rotate({ 0.0, 1.0, 0.0, angle }))
-      .update(color().set({ 1.0, 0.5, 0.0, 1.0 }))
+      .update(material().color({ 0.0, 0.5, 1.0, 1.0 }))
       .use();
     angle++;
     c_box->render();
@@ -69,7 +74,7 @@ private:
   drill::field<drill::compiler> compiler;
   drill::field<drill::linker> linker;
   drill::field<drill::transform> transform;
-  drill::field<drill::color> color;
+  drill::field<drill::material> material;
 
   drill::wavefront_reader reader;
   drill::png_reader png_reader;
@@ -120,18 +125,20 @@ int main() {
   drill::gllinker gllinker;
   drill::gltransform gltransform;
   drill::glcolor glcolor;
+  drill::glmaterial glmaterial;
 
   glplatform.define<drill::context>(glcontext);
   glplatform.define<drill::renderer>(glrenderer);
   glplatform.define<drill::compiler>(glcompiler);
   glplatform.define<drill::linker>(gllinker);
   glplatform.define<drill::transform>(gltransform);
-  glplatform.define<drill::color>(glcolor);
+  glplatform.define<drill::material>(glmaterial);
 
   app.add_service(glrenderer);
 
   gltransform.init();
   glcolor.init();
+  glmaterial.init();
 
   my_view glmy;
   drill::scene glscene(glplatform);
