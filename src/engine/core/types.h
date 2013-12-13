@@ -35,6 +35,12 @@ namespace drill {
   } vector3i_t;
 
   typedef struct {
+    vector3_t vertex;
+    vector2_t texture;
+    vector3_t normal;
+  } vertex_t;
+
+  typedef struct {
     vector3_t *vertices, *normals;
     vector2_t *textures;
     uint32_t count;

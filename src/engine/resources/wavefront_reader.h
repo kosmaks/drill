@@ -10,7 +10,7 @@ namespace drill {
   class wavefront_reader {
   public:
     void load_from_file(const std::string &path);
-    void to_object(object &dest);
+    object to_object();
 
   private:
     std::vector<vector3_t> _vertices;

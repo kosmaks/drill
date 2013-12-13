@@ -13,11 +13,22 @@ using namespace drill;
 
 vector3i_t parse_face(std::string &mem) {
   vector3i_t storage = { 0, 0, 0 };
-  std::replace_if(mem.begin(), mem.end(), [](int x) { return x == '/'; }, ' ');
   std::stringstream stream(mem);
+  char slash;
   stream >> storage.x;
-  if (stream.rdbuf()->in_avail()) stream >> storage.y;
-  if (stream.rdbuf()->in_avail()) stream >> storage.z;
+  if (stream.rdbuf()->in_avail()) {
+    stream >> slash;
+    stream << '0';
+    if (stream.rdbuf()->in_avail()) {
+      stream >> storage.y;
+      if (stream.rdbuf()->in_avail()) {
+        stream >> slash;
+        if (stream.rdbuf()->in_avail()) {
+          stream >> storage.z;
+        }
+      }
+    }
+  }
   return storage;
 }
 
@@ -111,13 +122,9 @@ void wavefront_reader::load_from_file(const std::string &path) {
   stream.close();
 }
 
-void wavefront_reader::to_object(object &dest) {
-  dest.triangles.count = 3 * std::count_if(_faces.begin(), _faces.end(), 
-      [](std::list<vector3i_t>& vec) { return vec.size() == 3; });
-
-  dest.triangles.vertices = new vector3_t[dest.triangles.count];
-  dest.triangles.textures = new vector2_t[dest.triangles.count];
-  dest.triangles.normals  = new vector3_t[dest.triangles.count];
+object wavefront_reader::to_object() {
+  object obj(3 * std::count_if(_faces.begin(), _faces.end(), 
+      [](std::list<vector3i_t>& vec) { return vec.size() == 3; }));
 
   vector2_t zero2 = { 0, 0 };
   vector3_t zero3 = { 0, 0, 0 };
@@ -126,11 +133,13 @@ void wavefront_reader::to_object(object &dest) {
   for (std::list<vector3i_t>& vec : _faces) {
     if (vec.size() == 3) {
       for (vector3i_t& descr : vec) {
-        dest.triangles.vertices[i] = _vertices[descr.x-1];
-        dest.triangles.textures[i] = (descr.y > 0) ? _textures[descr.y-1] : zero2;
-        dest.triangles.normals[i] = (descr.z > 0) ? _normals[descr.z-1] : zero3;
+        obj.get_triangles(i)->vertex = _vertices[descr.x-1];
+        obj.get_triangles(i)->texture = (descr.y > 0) ? _textures[descr.y-1] : zero2;
+        obj.get_triangles(i)->normal = (descr.z > 0) ? _normals[descr.z-1] : zero3;
         i += 1;
       }
     }
   }
+  
+  return obj;
 }

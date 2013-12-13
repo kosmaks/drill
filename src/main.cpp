@@ -37,8 +37,9 @@ public:
     transform = require<drill::transform>();
     color = require<drill::color>();
 
-    reader.load_from_file("dist/wbox.obj");
-    reader.to_object(box);
+    reader.load_from_file("dist/bit.obj");
+    LOG_INFO("loading from object");
+    box = reader.to_object();
     c_box = compiler().compile(box);
 
     png_reader.load_from_file("dist/texture.png");
@@ -49,17 +50,18 @@ public:
       .include(transform())
       .include(color())
       .end();
+
+    angle = 1;
   }
 
   void update(const drill::timeinfo_t &time) {
     linker()
       .update(transform().model_identity()
-                         .model_translate({ 0.5, 0.0, 0.0 })
-                         .model_scale({ 0.5, 1.0, 1.0 })
-                         .model_rotate({ 0.0, 1.0, 0.0, 60 })
-                         .model_rotate({ 1.0, 0.0, 0.0, 30 }))
+                         .model_scale({ 0.03, 0.03, 0.03 })
+                         .model_rotate({ 0.0, 1.0, 0.0, angle }))
       .update(color().set({ 1.0, 0.5, 0.0, 1.0 }))
       .use();
+    angle++;
     c_box->render();
   }
 
@@ -74,6 +76,8 @@ private:
   drill::object box;
   drill::texture texture;
   drill::c_object *c_box;
+
+  float angle;
 };
 
 int main() {
