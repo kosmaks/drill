@@ -15,17 +15,20 @@
 #define SCREEN_HEIGHT 600
 
 // global declarations
-IDXGISwapChain *swapchain;             // the pointer to the swap chain interface
-ID3D11Device *dev;                     // the pointer to our Direct3D device interface
-ID3D11DeviceContext *devcon;           // the pointer to our Direct3D device context
-ID3D11RenderTargetView *backbuffer;    // the pointer to our back buffer
-ID3D11InputLayout *pLayout;            // the pointer to the input layout
-ID3D11VertexShader *pVS;               // the pointer to the vertex shader
-ID3D11PixelShader *pPS;                // the pointer to the pixel shader
-ID3D11Buffer *pVBuffer;                // the pointer to the vertex buffer
+IDXGISwapChain *swapchain = NULL;             // the pointer to the swap chain interface
+ID3D11Device *dev = NULL;                     // the pointer to our Direct3D device interface
+ID3D11DeviceContext *devcon = NULL;           // the pointer to our Direct3D device context
+ID3D11RenderTargetView *backbuffer = NULL;    // the pointer to our back buffer
+ID3D11InputLayout *pLayout = NULL;            // the pointer to the input layout
+ID3D11VertexShader *pVS = NULL;               // the pointer to the vertex shader
+ID3D11PixelShader *pPS = NULL;                // the pointer to the pixel shader
+ID3D11Buffer *pVBuffer = NULL;                // the pointer to the vertex buffer
+ID3D11Buffer *pIBuffer = NULL;                // the pointer to the index buffer
+ID3D11DepthStencilView *pDView = NULL;        // the pointer to depth stencil view
+ID3D11Texture2D *pDStencil = NULL;            // the pointer to depth stencil
 
 // a struct to define a single vertex
-struct VERTEX{FLOAT X, Y, Z; /*D3DXCOLOR Color;*/};
+struct VERTEX{FLOAT X, Y, Z; D3DXCOLOR Color;};
 
 // function prototypes
 void InitD3D(HWND hWnd);    // sets up and initializes Direct3D
@@ -37,13 +40,6 @@ void InitPipeline(void);    // loads and prepares the shaders
 // the WindowProc function prototype
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-    typedef struct {
-      D3DXMATRIX m_model,
-                 m_projection,
-                 m_view;
-    } state_t;
-    state_t state;
-    ID3D11Buffer *buffer;
 
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -72,8 +68,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
                           "WindowClass",
                           "Our First Direct3D Program",
                           WS_OVERLAPPEDWINDOW,
-                          300,
-                          300,
+                          CW_USEDEFAULT,
+                          CW_USEDEFAULT,
                           wr.right - wr.left,
                           wr.bottom - wr.top,
                           NULL,
@@ -143,7 +139,8 @@ void InitD3D(HWND hWnd)
     scd.BufferDesc.Height = SCREEN_HEIGHT;                 // set the back buffer height
     scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;     // how swap chain is to be used
     scd.OutputWindow = hWnd;                               // the window to be used
-    scd.SampleDesc.Count = 4;                              // how many multisamples
+    scd.SampleDesc.Count = 0;                              // how many multisamples
+    scd.SampleDesc.Quality = 1;                              // how many multisamples
     scd.Windowed = TRUE;                                   // windowed/full-screen mode
     scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;    // allow full-screen switching
 
@@ -151,7 +148,7 @@ void InitD3D(HWND hWnd)
     D3D11CreateDeviceAndSwapChain(NULL,
                                   D3D_DRIVER_TYPE_HARDWARE,
                                   NULL,
-                                  NULL,
+                                  D3D11_CREATE_DEVICE_DEBUG,
                                   NULL,
                                   NULL,
                                   D3D11_SDK_VERSION,
@@ -170,9 +167,33 @@ void InitD3D(HWND hWnd)
     dev->CreateRenderTargetView(pBackBuffer, NULL, &backbuffer);
     pBackBuffer->Release();
 
-    // set the render target as the back buffer
-    devcon->OMSetRenderTargets(1, &backbuffer, NULL);
+    //Create depth stencil buffer
+    D3D11_TEXTURE2D_DESC descDepth;
+    descDepth.Width = SCREEN_WIDTH;
+    descDepth.Height = SCREEN_HEIGHT;
+    descDepth.MipLevels = 1;
+    descDepth.ArraySize = 1;
+    descDepth.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    descDepth.SampleDesc.Count = 0;
+    descDepth.SampleDesc.Quality = 1;
+    descDepth.Usage = D3D11_USAGE_DYNAMIC;
+    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    descDepth.CPUAccessFlags = 0;
+    descDepth.MiscFlags = 0;
 
+    dev->CreateTexture2D( &descDepth, NULL, &pDStencil );
+
+    // Create the depth stencil view
+    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+    descDSV.Flags = 0;
+    descDSV.Format = descDepth.Format;
+    descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+    descDSV.Texture2DMS.UnusedField_NothingToDefine = 0;
+
+    dev->CreateDepthStencilView( pDStencil, &descDSV, &pDView );
+
+    // set the render target as the back buffer
+    devcon->OMSetRenderTargets(1, &backbuffer, pDView);
 
     // Set the viewport
     D3D11_VIEWPORT viewport;
@@ -182,11 +203,13 @@ void InitD3D(HWND hWnd)
     viewport.TopLeftY = 0;
     viewport.Width = SCREEN_WIDTH;
     viewport.Height = SCREEN_HEIGHT;
+    viewport.MinDepth = 0.0f;
+    viewport.MaxDepth = 1.0f;
 
     devcon->RSSetViewports(1, &viewport);
 
-    InitGraphics();
     InitPipeline();
+    InitGraphics();
 }
 
 
@@ -194,35 +217,24 @@ void InitD3D(HWND hWnd)
 void RenderFrame(void)
 {
     // clear the back buffer to a deep blue
-    devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.2f, 0.4f, 1.0f));
+    devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-  D3DXMATRIX rotate, product;
-  D3DXVECTOR3 vec = { 1.0, 0.0, 0.0 };
-  D3DXMatrixRotationAxis(&rotate, &vec, 3.14 * 0.5 / 180);
-  D3DXMatrixMultiply(&product, &state.m_model, &rotate);
-  state.m_model = product;
-
-    D3D11_MAPPED_SUBRESOURCE ms;
-    devcon->Map(buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
-    state_t *s = (state_t*)ms.pData;
-    s->m_model = state.m_model;
-    s->m_projection = state.m_projection;
-    s->m_view = state.m_view;
-    devcon->Unmap(buffer, NULL);
-
-    ID3D11Buffer *buffers[] = { buffer };
-    devcon->VSSetConstantBuffers(0, 1, &buffer);
+    //clear the depth stencil view
+    devcon->ClearDepthStencilView(pDView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
         // select which vertex buffer to display
         UINT stride = sizeof(VERTEX);
         UINT offset = 0;
         devcon->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);
 
+        //set index buffer
+        devcon->IASetIndexBuffer(pIBuffer, DXGI_FORMAT_R32_UINT, 0);
+
         // select which primtive type we are using
         devcon->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
         // draw the vertex buffer to the back buffer
-        devcon->Draw(3, 0);
+        devcon->DrawIndexed(9, 0, 0);
 
     // switch the back buffer and the front buffer
     swapchain->Present(0, 0);
@@ -235,14 +247,17 @@ void CleanD3D(void)
     swapchain->SetFullscreenState(FALSE, NULL);    // switch to windowed mode
 
     // close and release all existing COM objects
-    pLayout->Release();
-    pVS->Release();
-    pPS->Release();
-    pVBuffer->Release();
-    swapchain->Release();
-    backbuffer->Release();
-    dev->Release();
-    devcon->Release();
+    if(pLayout)pLayout->Release();
+    if(pVS)pVS->Release();
+    if(pPS)pPS->Release();
+    if(pVBuffer)pVBuffer->Release();
+    if(pIBuffer)pIBuffer->Release();
+    if(swapchain)swapchain->Release();
+    if(backbuffer)backbuffer->Release();
+    if(dev)dev->Release();
+    if(devcon)devcon->Release();
+    if(pDStencil)pDStencil->Release();
+    if(pDView)pDView->Release();
 }
 
 
@@ -250,46 +265,58 @@ void CleanD3D(void)
 void InitGraphics()
 {
     // create a triangle using the VERTEX struct
-    VERTEX OurVertices[] = {
-        { 0.0f,   0.5f,  0.0f},
-        { 0.45f, -0.5,   0.0f},
-        {-0.45f, -0.5f,  0.0f}
+    VERTEX Vertices[] =
+    {
+        {-0.5f, 0.5f, 1.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+        {0.5f, 0.5f, 1.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+        {0.5f, -0.5f, 1.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+        {-0.5f, -0.5f, 1.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+        {0.75f, 0.75f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
+        {0.75f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
+        {0.0f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
     };
 
+    DWORD Indices[]=
+    {
+        0,2,3,
+        4,5,6,
+    };
 
     // create the vertex buffer
-    D3D11_BUFFER_DESC bd;
+    D3D11_BUFFER_DESC bd,id;
     ZeroMemory(&bd, sizeof(bd));
+    ZeroMemory(&id, sizeof(id));
 
     bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-    bd.ByteWidth = sizeof(VERTEX) * 3;             // size is the VERTEX struct * 3
+    bd.ByteWidth = sizeof(VERTEX) * 7;             // size is the VERTEX struct * 4
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
     bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
-    dev->CreateBuffer(&bd, NULL, &pVBuffer);       // create the buffer
+    id.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+    id.ByteWidth = sizeof(DWORD) * 3*3;             // size is the DWORD struct * 2 * 3
+    id.BindFlags = D3D11_BIND_INDEX_BUFFER;       // use as a index buffer
+    id.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
+    dev->CreateBuffer(&bd, NULL, &pVBuffer);       // create the buffer
+    dev->CreateBuffer(&id, NULL, &pIBuffer);
 
     // copy the vertices into the buffer
     D3D11_MAPPED_SUBRESOURCE ms;
     devcon->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
-    memcpy(ms.pData, OurVertices, sizeof(OurVertices));                 // copy the data
+    memcpy(ms.pData, Vertices, sizeof(Vertices));                       // copy the data
     devcon->Unmap(pVBuffer, NULL);                                      // unmap the buffer
+
+     // copy the indices into the buffer
+    D3D11_MAPPED_SUBRESOURCE ims;
+    devcon->Map(pIBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ims);    // map the buffer
+    memcpy(ims.pData, Indices, sizeof(Indices));                       // copy the data
+    devcon->Unmap(pIBuffer, NULL);                                      // unmap the buffer
 }
 
 
 // this function loads and prepares the shaders
 void InitPipeline()
 {
-  D3D11_BUFFER_DESC bd;
-  ZeroMemory(&bd, sizeof(bd));
-  bd.Usage = D3D11_USAGE_DYNAMIC;
-  bd.ByteWidth = sizeof(state_t);
-  bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-  bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-  dev->CreateBuffer(&bd, NULL, &buffer);
-
-  D3DXMatrixIdentity(&state.m_model);
-
     // load and compile the two shaders
     ID3D10Blob *VS, *PS;
     D3DX11CompileFromFile("src/shaders.hlsl", 0, 0, "VShader", "vs_5_0", 0, 0, 0, &VS, 0, 0);
@@ -310,7 +337,7 @@ void InitPipeline()
         {"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
-    dev->CreateInputLayout(ied, 1, VS->GetBufferPointer(), VS->GetBufferSize(), &pLayout);
+    dev->CreateInputLayout(ied, 2, VS->GetBufferPointer(), VS->GetBufferSize(), &pLayout);
     devcon->IASetInputLayout(pLayout);
 }
 

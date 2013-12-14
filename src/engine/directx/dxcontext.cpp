@@ -3,6 +3,8 @@
 
 using namespace drill;
 
+#define DXD(x) { auto k = (x); if (FAILED(k)) LOG_ERROR("HRESULT = FAILED"); }
+
 LRESULT CALLBACK WindowProc(HWND h_wnd, UINT message, WPARAM w_param, LPARAM l_param) {
     switch(message) {
     }
@@ -60,6 +62,7 @@ void dxcontext::clear_screen() {
     DispatchMessage(&msg);
   }
   handle.devcon->ClearRenderTargetView(backbuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	handle.devcon->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void dxcontext::swap_buffers() {
@@ -95,22 +98,82 @@ void dxcontext::init_d3d() {
   scd.OutputWindow = h_wnd;                               // the window to be used
   scd.Windowed = true;                                    // windowed/full-screen mode
 
-  D3D11CreateDeviceAndSwapChain(NULL,
+  D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
+  DXD(D3D11CreateDeviceAndSwapChain(NULL,
                                 D3D_DRIVER_TYPE_HARDWARE,
-                                NULL, NULL, NULL, NULL,
+                                NULL, 
+                                0, 
+                                &featureLevel, 
+                                1,
                                 D3D11_SDK_VERSION,
                                 &scd,
                                 &swapchain,
                                 &handle.dev,
                                 NULL,
-                                &handle.devcon);
+                                &handle.devcon));
 
   LOG_DEBUG("Setting up render target");
   ID3D11Texture2D *p_back_buffer;
-  swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&p_back_buffer);
+  DXD(swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&p_back_buffer));
   handle.dev->CreateRenderTargetView(p_back_buffer, NULL, &backbuffer);
   p_back_buffer->Release();
-  handle.devcon->OMSetRenderTargets(1, &backbuffer, NULL);
+
+  LOG_DEBUG("Setting up depth-stencil buffer");
+  D3D11_TEXTURE2D_DESC descDepth;
+  descDepth.Width = _width;
+  descDepth.Height = _height;
+  descDepth.MipLevels = 1;
+  descDepth.ArraySize = 1;
+  descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+  descDepth.SampleDesc.Count = 1;
+  descDepth.SampleDesc.Quality = 0;
+  descDepth.Usage = D3D11_USAGE_DEFAULT;
+  descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+  descDepth.CPUAccessFlags = 0;
+  descDepth.MiscFlags = 0;
+
+  ID3D11Texture2D* pDS = NULL;
+  handle.dev->CreateTexture2D(&descDepth, NULL, &pDS);
+
+  D3D11_DEPTH_STENCIL_DESC dsDesc;
+
+  // Depth test parameters
+  dsDesc.DepthEnable = true;
+  dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+  dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+  // Stencil test parameters
+  dsDesc.StencilEnable = true;
+  dsDesc.StencilReadMask = 0xFF;
+  dsDesc.StencilWriteMask = 0xFF;
+
+  // Stencil operations if pixel is front-facing
+  dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+  dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+  dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+  dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+  // Stencil operations if pixel is back-facing
+  dsDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+  dsDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+  dsDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+  dsDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+  // Create depth stencil state
+  ID3D11DepthStencilState * pDSState;
+  handle.dev->CreateDepthStencilState(&dsDesc, &pDSState);
+  handle.devcon->OMSetDepthStencilState(pDSState, 1);
+
+  LOG_DEBUG("Binding depth-stencil resource");
+  D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+  descDSV.Format = descDepth.Format;
+  descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+  descDSV.Texture2D.MipSlice = 0;
+  descDSV.Flags = 0;
+
+  handle.dev->CreateDepthStencilView(pDS, &descDSV, &dsv);
+  handle.devcon->OMSetRenderTargets(1, &backbuffer, dsv);
+  //handle.devcon->OMSetRenderTargets(1, &backbuffer, NULL);
 
   LOG_DEBUG("Setting up viewport");
   D3D11_VIEWPORT viewport;
@@ -124,21 +187,21 @@ void dxcontext::init_d3d() {
   handle.devcon->RSSetViewports(1, &viewport);
 
   LOG_DEBUG("Setting up rastarizer");
-  D3D11_RASTERIZER_DESC rasterizerState;
-  ZeroMemory(&rasterizerState, sizeof(D3D11_RASTERIZER_DESC));
-  rasterizerState.CullMode = D3D11_CULL_NONE;
-  rasterizerState.FillMode = D3D11_FILL_SOLID;
-  //rasterizerState.FillMode = D3D11_FILL_WIREFRAME;
-  rasterizerState.FrontCounterClockwise = true;
-  rasterizerState.DepthBias = false;
-  rasterizerState.DepthBiasClamp = 0;
-  rasterizerState.SlopeScaledDepthBias = 0;
-  rasterizerState.DepthClipEnable = true;
-  rasterizerState.ScissorEnable = false;
-  rasterizerState.MultisampleEnable = false;
-  rasterizerState.AntialiasedLineEnable = true;
-
   ID3D11RasterizerState *pRS;
-  handle.dev->CreateRasterizerState(&rasterizerState, &pRS);
+  D3D11_RASTERIZER_DESC rasterizer;
+  ZeroMemory(&rasterizer, sizeof(D3D11_RASTERIZER_DESC));
+  rasterizer.CullMode = D3D11_CULL_BACK;
+  rasterizer.FillMode = D3D11_FILL_SOLID;
+  //rasterizer.FillMode = D3D11_FILL_WIREFRAME;
+  rasterizer.FrontCounterClockwise = true;
+  rasterizer.DepthBias = false;
+  rasterizer.DepthBiasClamp = 0;
+  rasterizer.SlopeScaledDepthBias = 0;
+  rasterizer.DepthClipEnable = true;
+  rasterizer.ScissorEnable = false;
+  rasterizer.MultisampleEnable = false;
+  rasterizer.AntialiasedLineEnable = true;
+  handle.dev->CreateRasterizerState(&rasterizer, &pRS);
   handle.devcon->RSSetState(pRS);
+
 }

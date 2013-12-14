@@ -32,6 +32,7 @@ namespace drill {
 
     IDXGISwapChain *swapchain;
     ID3D11RenderTargetView *backbuffer;
+    ID3D11DepthStencilView* dsv;
 
     void init_d3d();
   };

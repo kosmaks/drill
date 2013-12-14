@@ -14,11 +14,12 @@ VOut VSTransform(float4 position : POSITION,
                  float4 texcoord : TEXCOORD, 
                  float4 normal : NORMAL) {
   VOut output;
-  float4x4 PVM = mul(m_view, m_projection);
-  PVM = mul(m_model, PVM);
-  output.position = mul(position, PVM);
+  float4x4 PV = mul(m_projection, m_view);
+  float4x4 PVM = mul(PV, m_model);
+
+  output.position = mul(PVM, position);
+  output.normal = mul(PVM, normal);
   output.texcoord = texcoord;
-  output.normal = mul(normal, PVM);
-  output.position.w = 1.0;
+
   return output;
 }

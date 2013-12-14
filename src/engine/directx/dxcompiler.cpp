@@ -18,6 +18,7 @@ c_object *dxcompiler::compile(object &obj) {
   if (r == nullptr) { _pool[&obj] = r = new dxc_object(); }
   r->handle = handle;
   r->count = obj.get_triangles_count();
+  r->buffer = 0;
 
   D3D11_BUFFER_DESC bd;
   ZeroMemory(&bd, sizeof(bd));
@@ -28,6 +29,7 @@ c_object *dxcompiler::compile(object &obj) {
 
   LOG_DEBUG("Creating DirectX buffer");
   handle->dev->CreateBuffer(&bd, NULL, &r->buffer);
+  LOG_DEBUG("r->buffer = " << r->buffer);
 
   D3D11_MAPPED_SUBRESOURCE ms;
   handle->devcon->Map(r->buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);

@@ -55,19 +55,28 @@ public:
       .include(material())
       .end();
 
-    angle = 1;
+    angle = 0.0;
   }
 
   void update(const drill::timeinfo_t &time) {
     linker()
       .update(transform().model_identity()
+                         .model_translate({ 0.0, 0.0, -(angle) })
+                         .model_rotate({ 0.0, 1.0, 0.0, 100 * (angle) })
                          .projection_identity()
-                         //.model_scale({ 0.035, 0.035, 0.035 })
-                         .projection_rotate({ 1.0, 0.0, 0.0, -30 })
-                         .model_rotate({ 0.0, 1.0, 0.0, angle }))
+                         .projection_install(0.1, 100.0, 640.0 / 480.0, 60))
+      .update(material().color({ 1.0, 0.5, 0.0, 1.0 }))
+      .use();
+    c_box->render();
+
+    linker()
+      .update(transform().model_identity()
+                         .model_rotate({ 0.0, 1.0, 0.0, 100 * (angle) })
+                         .model_translate({ 0.0, 0.0, (angle += 0.01) })
+                         .projection_identity()
+                         .projection_install(0.1, 100.0, 640.0 / 480.0, 60))
       .update(material().color({ 0.0, 0.5, 1.0, 1.0 }))
       .use();
-    angle++;
     c_box->render();
   }
 

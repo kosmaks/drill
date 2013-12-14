@@ -16,6 +16,11 @@ void dxtransform::init() {
   projection_identity();
   view_identity();
 
+  LOG_DEBUG(state.m_model(0, 0) << " " << state.m_model(1, 0) << " " << state.m_model(2, 0) << " " << state.m_model(3, 0));
+  LOG_DEBUG(state.m_model(0, 1) << " " << state.m_model(1, 1) << " " << state.m_model(2, 1) << " " << state.m_model(3, 1));
+  LOG_DEBUG(state.m_model(0, 2) << " " << state.m_model(1, 2) << " " << state.m_model(2, 2) << " " << state.m_model(3, 2));
+  LOG_DEBUG(state.m_model(0, 3) << " " << state.m_model(1, 3) << " " << state.m_model(2, 3) << " " << state.m_model(3, 3));
+
   D3D11_BUFFER_DESC bd;
   ZeroMemory(&bd, sizeof(bd));
   bd.Usage = D3D11_USAGE_DYNAMIC;
@@ -27,75 +32,54 @@ void dxtransform::init() {
 
 transform& dxtransform::model_identity() {
   D3DXMatrixIdentity(&state.m_model);
+  state.m_model = state.m_model;
   return *this;
 }
 
 transform& dxtransform::projection_identity() {
   D3DXMatrixIdentity(&state.m_projection);
+  state.m_projection = state.m_projection;
   return *this;
 }
 
 transform& dxtransform::view_identity() {
   D3DXMatrixIdentity(&state.m_view);
+  state.m_view = state.m_view;
   return *this;
 }
 
 transform& dxtransform::model_translate(const vector3_t &v) {
-  D3DXMATRIX translation, tt;
+  D3DXMATRIX translation;
   D3DXMatrixTranslation(&translation, v.x, v.y, v.z);
-  D3DXMatrixTranspose(&tt, &translation);
-  state.m_model *= tt;
+  state.m_model = translation * state.m_model;
   return *this;
 }
 
 transform& dxtransform::model_rotate(const vector4_t &v) {
   D3DXMATRIX rotate;
   D3DXMatrixRotationAxis(&rotate, (const D3DXVECTOR3*)&v, TO_RAD(v.w));
-  state.m_model *= rotate;
+  state.m_model = rotate * state.m_model;
   return *this;
 }
 
 transform& dxtransform::model_scale(const vector3_t &v) {
   D3DXMATRIX scaling;
   D3DXMatrixScaling(&scaling, v.x, v.y, v.z);
-  state.m_model *= scaling;
-  return *this;
-}
-
-transform& dxtransform::projection_translate(const vector3_t &v) {
-  D3DXMATRIX translation, tt;
-  D3DXMatrixTranslation(&translation, v.x, v.y, v.z);
-  D3DXMatrixTranspose(&tt, &translation);
-  state.m_projection *= tt;
-  return *this;
-}
-
-transform& dxtransform::projection_rotate(const vector4_t &v) {
-  D3DXMATRIX rotate;
-  D3DXMatrixRotationAxis(&rotate, (const D3DXVECTOR3*)&v, TO_RAD(v.w));
-  state.m_projection *= rotate;
-  return *this;
-}
-
-transform& dxtransform::projection_scale(const vector3_t &v) {
-  D3DXMATRIX scaling;
-  D3DXMatrixScaling(&scaling, v.x, v.y, v.z);
-  state.m_projection *= scaling;
+  state.m_model = scaling * state.m_model;
   return *this;
 }
 
 transform& dxtransform::view_translate(const vector3_t &v) {
   D3DXMATRIX translation, tt;
   D3DXMatrixTranslation(&translation, v.x, v.y, v.z);
-  D3DXMatrixTranspose(&tt, &translation);
   state.m_view *= tt;
   return *this;
 }
 
 transform& dxtransform::view_rotate(const vector4_t &v) {
-  D3DXMATRIX scaling;
-  D3DXMatrixScaling(&scaling, v.x, v.y, v.z);
-  state.m_view *= scaling;
+  D3DXMATRIX rotate;
+  D3DXMatrixRotationAxis(&rotate, (const D3DXVECTOR3*)&v, TO_RAD(v.w));
+  state.m_view *= rotate;
   return *this;
 }
 
@@ -103,6 +87,11 @@ transform& dxtransform::view_scale(const vector3_t &v) {
   D3DXMATRIX scaling;
   D3DXMatrixScaling(&scaling, v.x, v.y, v.z);
   state.m_view *= scaling;
+  return *this;
+}
+
+transform& dxtransform::projection_install(coord_t n, coord_t f, float aspect, float fov) {
+  D3DXMatrixPerspectiveFovRH(&state.m_projection, TO_RAD(fov), aspect, n, f);
   return *this;
 }
 
