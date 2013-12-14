@@ -8,7 +8,6 @@ namespace drill {
   class glplatform : public service, public platform {
   public:
     void init() {
-      LOG_ERROR("here");
       define<context>(_glcontext);
       define<renderer>(_glrenderer);
       define<compiler>(_glcompiler);

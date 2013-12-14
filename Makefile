@@ -16,18 +16,17 @@ SOURCES_OGL = $(wildcard src/engine/opengl/*.cpp) $(wildcard src/engine/opengl/m
 SOURCES_DX = $(wildcard src/engine/directx/*.cpp) $(wildcard src/engine/directx/modules/*.cpp)
 
 all:
-	@$(CC) -o dist/main $(CFLAGS) $(CLIBS) $(SOURCES) $(SOURCES_OGL) -I./lib -I./src -I./src/external -O1
+	@$(CC) -o dist/main.exe $(CFLAGS) $(CLIBS) $(SOURCES) $(SOURCES_OGL) -I./lib -I./src -I./src/external -O1
 	@cp -rf res/* dist
-	@dist/main
+	@dist/main.exe
 
 windows:
 	$(WC) /Od /I.\lib /I.\src /I.\src\external '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) $(SOURCES) $(SOURCES_DX) $(SOURCES_OGL) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
 	@rm '*.obj' -f
 	@cp -rf 'res/*' dist
+
+dx:
 	@dist/main.exe
 
-test:
-	@$(WC) /I.\lib /I.\src '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) test.cpp $(WLIBS) /link /out:dist\main.exe $(WLINKS)
-	@rm '*.obj' -f
-	@cp -rf 'res/*' dist
-	@dist/main.exe
+gl:
+	@dist/main.exe opengl
