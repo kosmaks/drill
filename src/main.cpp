@@ -1,35 +1,14 @@
 #include <cmath>
-#include "engine/core/app.h"
-#include "engine/core/field.h"
-#include "engine/core/platform.h"
-#include "engine/world/scene.h"
-#include "engine/world/view.h"
-#include "engine/world/primitives.h"
-#include "engine/virtual/compiler.h"
-#include "engine/virtual/modules/transform.h"
-#include "engine/virtual/modules/color.h"
-#include "engine/virtual/modules/material.h"
-#include "engine/resources/wavefront_reader.h"
-#include "engine/resources/png_reader.h"
+#include "engine/core.h"
+#include "engine/world.h"
+#include "engine/resources.h"
 
 #ifdef OPENGL
-#include "engine/opengl/glrenderer.h"
-#include "engine/opengl/glcontext.h"
-#include "engine/opengl/glcompiler.h"
-#include "engine/opengl/gllinker.h"
-#include "engine/opengl/modules/gltransform.h"
-#include "engine/opengl/modules/glcolor.h"
-#include "engine/opengl/modules/glmaterial.h"
+#include "engine/opengl.h"
 #endif
 
 #ifdef DIRECTX
-#include "engine/directx/dxrenderer.h"
-#include "engine/directx/dxcontext.h"
-#include "engine/directx/dxcompiler.h"
-#include "engine/directx/dxlinker.h"
-#include "engine/directx/modules/dxtransform.h"
-#include "engine/directx/modules/dxcolor.h"
-#include "engine/directx/modules/dxmaterial.h"
+#include "engine/directx.h"
 #endif
 
 class my_view : public drill::view {
