@@ -11,6 +11,5 @@ void main() {
   float intensity = 1;
   vec4 res = texture2D(basic_texture, texcoord.st);
   vec4 color = color * res * intensity;
-  color.w = 0.5;
   gl_FragColor = color;
 }
