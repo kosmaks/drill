@@ -89,9 +89,6 @@ void dxcontext::init_d3d() {
   scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;     // use 32-bit color
   scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;      // how swap chain is to be used
 
-  scd.BufferDesc.RefreshRate.Denominator = 20;             // refresh rate from
-  scd.BufferDesc.RefreshRate.Numerator = 60;              // to
-
   scd.SampleDesc.Quality = 0;
   scd.SampleDesc.Count = 1;                               // how many multisamples
 

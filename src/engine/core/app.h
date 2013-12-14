@@ -27,9 +27,16 @@ namespace drill {
     void freeze();
     void kill();
 
+    void set_max_fps(uint32_t fps);
+    uint32_t get_max_fps() { return max_fps; }
+
   private:
     bool _running;
     bool _frozen;
+
+    uint32_t max_fps, 
+             min_clocks_per_frame,
+             clocks_at_last_update;
 
     timeinfo_t _timeinfo;
     clock_t clocks_at_start;

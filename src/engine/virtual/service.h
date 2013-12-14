@@ -5,7 +5,6 @@ namespace drill {
     float frames_since_start;
     float seconds_since_start;
     float clocks_since_start;
-    float instant_fps;
     float average_fps;
   } timeinfo_t;
 
