@@ -1,6 +1,7 @@
 #include <cmath>
 #include "engine/core.h"
 #include "engine/world.h"
+#include "engine/views.h"
 #include "engine/resources.h"
 
 #ifdef OPENGL
@@ -40,14 +41,9 @@ public:
   void update(const drill::timeinfo_t &time) {
     linker()
       .update(transform().model_identity()
-                         .view_identity()
-                         .view_rotate({ 1.0, 0.0, 0.0, 10 })
-                         .view_translate({ 0.0, -2.0, -1.0 })
                          .model_scale({ 0.1, 0.1, 0.1 })
                          .model_translate({ 0.0, 0.0, -(angle) })
-                         .model_rotate({ 0.0, 1.0, 0.0, 10 * (angle += 0.05) })
-                         .projection_identity()
-                         .projection_install(0.1, 100.0, 640.0 / 480.0, 60))
+                         .model_rotate({ 0.0, 1.0, 0.0, 10 * (angle += 0.05) }))
       .update(material())
       .use();
     c_box->render();
@@ -97,9 +93,13 @@ int main() {
   dxcolor.init();
   dxmaterial.init();
 
-  my_view dxmy;
   drill::scene dxscene(dxplatform);
   dxrenderer.use_scene(dxscene);
+
+  drill::camera dxcamera;
+  my_view dxmy;
+
+  dxcamera.set_scene(dxscene);
   dxmy.set_scene(dxscene);
 #endif
 
@@ -127,9 +127,13 @@ int main() {
   glcolor.init();
   glmaterial.init();
 
-  my_view glmy;
   drill::scene glscene(glplatform);
   glrenderer.use_scene(glscene);
+
+  drill::camera glcamera;
+  my_view glmy;
+
+  glcamera.set_scene(glscene);
   glmy.set_scene(glscene);
 #endif
 

@@ -11,7 +11,7 @@ WLINKS = opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.li
 SOURCES = $(wildcard src/*.cpp) $(wildcard src/engine/core/*.cpp) \
 				 	$(wildcard src/engine/virtual/*.cpp) $(wildcard src/engine/world/*.cpp) \
 					$(wildcard src/engine/resources/*.cpp) $(wildcard src/engine/virtual/modules/*.cpp) \
-					$(wildcard src/external/*.cpp)
+					$(wildcard src/engine/views/*.cpp) $(wildcard src/external/*.cpp)
 SOURCES_OGL = $(wildcard src/engine/opengl/*.cpp) $(wildcard src/engine/opengl/modules/*.cpp)
 SOURCES_DX = $(wildcard src/engine/directx/*.cpp) $(wildcard src/engine/directx/modules/*.cpp)
 
