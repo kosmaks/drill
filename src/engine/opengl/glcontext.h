@@ -13,10 +13,13 @@ namespace drill {
     void swap_buffers();
     void clear_screen();
     void defined() {}
+    inline uint32_t get_width() { return _width; }
+    inline uint32_t get_height() { return _height; }
 
     virtual void* info(size_t hash) { return nullptr; }
 
   private:
     GLFWwindow *_window;
+    uint32_t _width, _height;
   };
 }

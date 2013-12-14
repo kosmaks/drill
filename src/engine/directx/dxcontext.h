@@ -19,6 +19,8 @@ namespace drill {
     void swap_buffers();
     void clear_screen();
     void defined() {}
+    inline uint32_t get_width() { return _width; }
+    inline uint32_t get_height() { return _height; }
 
     void* info(size_t hash);
 

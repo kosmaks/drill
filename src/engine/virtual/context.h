@@ -13,6 +13,8 @@ namespace drill {
     virtual void load() = 0;
     virtual void swap_buffers() = 0;
     virtual void clear_screen() = 0;
+    virtual uint32_t get_width() = 0;
+    virtual uint32_t get_height() = 0;
 
     template<class T> T* get_info() { return (T*)info(typeid(T).hash_code()); }
     virtual void* info(size_t hash) = 0;

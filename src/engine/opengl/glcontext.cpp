@@ -9,6 +9,9 @@ void glfw_error_callback(int error, const char* description) {
 }
 
 glcontext::glcontext(const std::string &title, int width, int height) {
+  _width = width;
+  _height = height;
+
   glinit(); 
   glfwSetErrorCallback(glfw_error_callback);
   _window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
