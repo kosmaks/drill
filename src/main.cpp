@@ -4,14 +4,6 @@
 #include "engine/views.h"
 #include "engine/resources.h"
 
-#ifdef OPENGL
-#include "engine/opengl.h"
-#endif
-
-#ifdef DIRECTX
-#include "engine/directx.h"
-#endif
-
 class my_view : public drill::view {
 public:
   void init() {
@@ -62,88 +54,42 @@ private:
   float angle;
 };
 
-int main() {
+int main(int argc, char **argv) {
   LOG_INFO("Application started");
 
   drill::application app;
+  drill::field<drill::platform> platform;
+  drill::field<drill::renderer> renderer;
 
-#ifdef DIRECTX
-  drill::platform dxplatform;
-  drill::dxcontext dxcontext("Course work: DirectX");
-  drill::dxrenderer dxrenderer;
-  drill::dxcompiler dxcompiler;
-  drill::dxlinker dxlinker;
-  drill::dxtransform dxtransform;
-  drill::dxcolor dxcolor;
-  drill::dxmaterial dxmaterial;
+  if (argc >= 2 && std::string(argv[1]) == "opengl") {
+    drill::glplatform *gl = new drill::glplatform();
+    app.add_service(*gl);
+    platform = gl;
+  } else {
+    drill::dxplatform *dx = new drill::dxplatform();
+    app.add_service(*dx);
+    platform = dx;
+  }
 
-  dxplatform.define<drill::context>(dxcontext);
-  dxplatform.define<drill::renderer>(dxrenderer);
-  dxplatform.define<drill::compiler>(dxcompiler);
-  dxplatform.define<drill::linker>(dxlinker);
-  dxplatform.define<drill::transform>(dxtransform);
-  dxplatform.define<drill::color>(dxcolor);
-  dxplatform.define<drill::material>(dxmaterial);
+  renderer = platform().include<drill::renderer>();
+  
+  drill::scene scene(platform());
+  renderer().use_scene(scene);
 
-  app.add_service(dxrenderer);
+  drill::camera camera;
+  my_view my;
 
-  dxtransform.init();
-  dxcolor.init();
-  dxmaterial.init();
+  camera.set_scene(scene);
+  my.set_scene(scene);
 
-  drill::scene dxscene(dxplatform);
-  dxrenderer.use_scene(dxscene);
-
-  drill::camera dxcamera;
-  my_view dxmy;
-
-  dxcamera.set_scene(dxscene);
-  dxmy.set_scene(dxscene);
-
-  dxcamera.look_at({ 0, 3, 3 }, 
-                   { 0, 0, 0 }, 
-                   { 0, 1, 0 });
-#endif
-
-#ifdef OPENGL
-  drill::platform glplatform;
-  drill::glcontext glcontext("Course work: OpenGL");
-  drill::glrenderer glrenderer;
-  drill::glcompiler glcompiler;
-  drill::gllinker gllinker;
-  drill::gltransform gltransform;
-  drill::glcolor glcolor;
-  drill::glmaterial glmaterial;
-
-  glplatform.define<drill::context>(glcontext);
-  glplatform.define<drill::renderer>(glrenderer);
-  glplatform.define<drill::compiler>(glcompiler);
-  glplatform.define<drill::linker>(gllinker);
-  glplatform.define<drill::transform>(gltransform);
-  glplatform.define<drill::color>(glcolor);
-  glplatform.define<drill::material>(glmaterial);
-
-  app.add_service(glrenderer);
-
-  gltransform.init();
-  glcolor.init();
-  glmaterial.init();
-
-  drill::scene glscene(glplatform);
-  glrenderer.use_scene(glscene);
-
-  drill::camera glcamera;
-  my_view glmy;
-
-  glcamera.set_scene(glscene);
-  glmy.set_scene(glscene);
-
-  glcamera.look_at({ 0, 3, 3 }, 
-                   { 0, 0, 0 }, 
-                   { 0, 1, 0 });
-#endif
+  camera.look_at({ 0, 3, 3 }, 
+                 { 0, 0, 0 }, 
+                 { 0, 1, 0 });
 
   app.run();
+
+  LOG_INFO("Cleaning up");
+  delete &platform();
 
   LOG_INFO("Application terminated");
   return 0;

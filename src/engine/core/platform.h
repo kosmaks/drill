@@ -35,6 +35,8 @@ namespace drill {
 
   class platform {
   public:
+    virtual ~platform() {}
+
     PLATFORM_DEF_T define(T &obj) {
       auto dep = ((dependency*)&obj);
       dep->current_platform = this;
