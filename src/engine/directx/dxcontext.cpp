@@ -131,35 +131,24 @@ void dxcontext::init_d3d() {
   descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
   descDepth.CPUAccessFlags = 0;
   descDepth.MiscFlags = 0;
-
   ID3D11Texture2D* pDS = NULL;
   handle.dev->CreateTexture2D(&descDepth, NULL, &pDS);
 
   D3D11_DEPTH_STENCIL_DESC dsDesc;
-
-  // Depth test parameters
   dsDesc.DepthEnable = true;
   dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
   dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
-
-  // Stencil test parameters
   dsDesc.StencilEnable = true;
   dsDesc.StencilReadMask = 0xFF;
   dsDesc.StencilWriteMask = 0xFF;
-
-  // Stencil operations if pixel is front-facing
   dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
   dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
   dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
   dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-  // Stencil operations if pixel is back-facing
   dsDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
   dsDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
   dsDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
   dsDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-  // Create depth stencil state
   ID3D11DepthStencilState * pDSState;
   handle.dev->CreateDepthStencilState(&dsDesc, &pDSState);
   handle.devcon->OMSetDepthStencilState(pDSState, 1);
@@ -170,10 +159,23 @@ void dxcontext::init_d3d() {
   descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
   descDSV.Texture2D.MipSlice = 0;
   descDSV.Flags = 0;
-
   handle.dev->CreateDepthStencilView(pDS, &descDSV, &dsv);
   handle.devcon->OMSetRenderTargets(1, &backbuffer, dsv);
-  //handle.devcon->OMSetRenderTargets(1, &backbuffer, NULL);
+
+  LOG_DEBUG("Configuring alpha blending");
+  D3D11_BLEND_DESC blend;
+  ZeroMemory(&blend, sizeof(D3D11_BLEND_DESC));
+  blend.RenderTarget[0].BlendEnable = TRUE;
+  blend.RenderTarget[0].RenderTargetWriteMask = 0x0F;
+  blend.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+  blend.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+  blend.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+  blend.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+  blend.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+  blend.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+  ID3D11BlendState* blendstate = NULL;
+  handle.dev->CreateBlendState(&blend, &blendstate);
+  handle.devcon->OMSetBlendState(blendstate, NULL, 0xFFFFFF);
 
   LOG_DEBUG("Setting up viewport");
   D3D11_VIEWPORT viewport;
@@ -190,7 +192,7 @@ void dxcontext::init_d3d() {
   ID3D11RasterizerState *pRS;
   D3D11_RASTERIZER_DESC rasterizer;
   ZeroMemory(&rasterizer, sizeof(D3D11_RASTERIZER_DESC));
-  rasterizer.CullMode = D3D11_CULL_BACK;
+  rasterizer.CullMode = D3D11_CULL_NONE;
   rasterizer.FillMode = D3D11_FILL_SOLID;
   //rasterizer.FillMode = D3D11_FILL_WIREFRAME;
   rasterizer.FrontCounterClockwise = true;

@@ -10,5 +10,7 @@ void main() {
   /*float intensity = dot(vec3(0.0, 1.5, 0.0), normal.xyz);*/
   float intensity = 1;
   vec4 res = texture2D(basic_texture, texcoord.st);
-  gl_FragColor = color * res * intensity;
+  vec4 color = color * res * intensity;
+  color.w = 0.5;
+  gl_FragColor = color;
 }

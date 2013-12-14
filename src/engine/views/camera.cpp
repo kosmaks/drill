@@ -19,3 +19,7 @@ void camera::update(const drill::timeinfo_t &time) {
               .view_translate({ 0.0, -2.0, -1.0 })
               .projection_install(_near, _far, _aspect, _fov);
 }
+
+void camera::look_at(vector3_t pos, vector3_t target, vector3_t up) {
+  _position = pos;
+}
