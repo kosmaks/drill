@@ -6,9 +6,8 @@
 namespace drill {
   class glmaterial : public glshader, public material {
   public:
-    void init();
     void link_to(linker *l) { glshader::link_to(l); }
-    void defined() {}
+    void defined();
     void ready();
     material& use_texture(const texture &texture);
     material& color(const vector4_t &color);

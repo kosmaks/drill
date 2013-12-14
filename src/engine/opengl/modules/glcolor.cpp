@@ -4,7 +4,7 @@
 
 using namespace drill;
 
-void glcolor::init() {
+void glcolor::defined() {
   compile(file_system::read_text_file(CFG_GL_COLOR_FS_PATH), GLSHADER_FRAGMENT);
 }
 

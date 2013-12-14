@@ -13,8 +13,8 @@ glrenderer::glrenderer() : renderer() {
 glrenderer::~glrenderer() {
 }
 
-void glrenderer::init() {
-  renderer::init();
+void glrenderer::defined() {
+  renderer::defined();
   LOG_DEBUG("Initializing GLEW");
   glewExperimental = GL_TRUE;
   glewInit();

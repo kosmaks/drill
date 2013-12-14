@@ -1,19 +1,19 @@
 #pragma once
 
 #include "engine/core/events.h"
-#include "engine/virtual/service.h"
+#include "engine/core/platform.h"
 
 namespace drill {
-  class input : public service {
+  class input : public dependency {
   public:
     input();
     virtual ~input();
 
-    event keypress;
-    event keyup;
-    event keydown;
-    event mousemove;
-    event mousedown;
-    event mouseup;
+    event on_keypress;
+    event on_keyup;
+    event on_keydown;
+    event on_mousemove;
+    event on_mousedown;
+    event on_mouseup;
   };
 }

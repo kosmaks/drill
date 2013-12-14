@@ -18,7 +18,6 @@ namespace drill {
     template<class T> T* include() { return &get_scene().c_platform.include<T>(); }
 
   private:
-    event::callback_t callback;   
     scene *c_scene;
   };
 }

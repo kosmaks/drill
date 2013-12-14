@@ -15,11 +15,7 @@ namespace drill {
       define<transform>(_gltransform);
       define<color>(_glcolor);
       define<material>(_glmaterial);
-
-      _glrenderer.init();
-      _gltransform.init();
-      _glcolor.init();
-      _glmaterial.init();
+      //define<input>(_glinput);
     }
 
     void update(const timeinfo_t &time) {
@@ -34,5 +30,6 @@ namespace drill {
     drill::gltransform _gltransform;
     drill::glcolor _glcolor;
     drill::glmaterial _glmaterial;
+    //drill::glinput _glinput;
   };
 }

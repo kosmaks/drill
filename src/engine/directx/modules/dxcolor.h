@@ -6,7 +6,6 @@
 namespace drill {
   class dxcolor : public dxshader, public color {
   public:
-    void init();
     void link_to(linker *l) { _link_to(l); }
     void defined();
     void ready();

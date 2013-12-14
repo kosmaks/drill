@@ -15,11 +15,6 @@ namespace drill {
       define<transform>(_dxtransform);
       define<color>(_dxcolor);
       define<material>(_dxmaterial);
-
-      _dxrenderer.init();
-      _dxtransform.init();
-      _dxcolor.init();
-      _dxmaterial.init();
     }
 
     void update(const timeinfo_t &time) {

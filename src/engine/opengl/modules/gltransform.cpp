@@ -6,7 +6,7 @@
 
 using namespace drill;
 
-void gltransform::init() {
+void gltransform::defined() {
   compile(file_system::read_text_file(CFG_GL_TRANSFORM_VS_PATH), GLSHADER_VERTEX);
   model_identity();
   projection_identity();

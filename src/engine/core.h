@@ -15,6 +15,7 @@
 #include "virtual/module.h"
 #include "virtual/renderer.h"
 #include "virtual/service.h"
+#include "virtual/input.h"
 
 #include "virtual/modules/color.h"
 #include "virtual/modules/material.h"

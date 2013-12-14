@@ -3,21 +3,32 @@
 #include <list>
 
 namespace drill {
+
+  class ehandler;
   class event {
-
   public:
-    typedef void(*callback_t)(void*);
 
-    void trigger(void *param = nullptr);
+    void trigger();
 
-    void on(const callback_t &callback);
-    void once(const callback_t &callback);
+    void on(ehandler *callback);
+    void once(ehandler *callback);
 
-    void off(const callback_t &callback);
+    void off(ehandler *callback);
     void clear();
 
   private:
-    std::list<callback_t> _callbacks;
-    std::list<callback_t> _once_callbacks;
+    std::list<ehandler*> _callbacks;
+    std::list<ehandler*> _once_callbacks;
+  };
+
+  class ehandler {
+  public:
+    typedef std::function<void()> callback_t;
+    ehandler(callback_t cb) : _cb(cb) {}
+
+    void operator()() { _cb(); } 
+
+  private:
+    callback_t _cb;
   };
 }

@@ -6,7 +6,6 @@
 namespace drill {
   class dxmaterial : public dxshader, public material {
   public:
-    void init();
     void link_to(linker *l) { _link_to(l); }
     void defined();
     void ready();

@@ -7,9 +7,6 @@ using namespace drill;
 
 void dxtransform::defined() {
   handle = REQUIRE(drill::context).get_info<dxhandle_t>();
-}
-
-void dxtransform::init() {
   compile(CFG_DX_TRANSFORM_VS_PATH, "VSTransform", DXSHADER_VERTEX);
 
   model_identity();

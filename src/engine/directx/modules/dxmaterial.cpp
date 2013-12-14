@@ -5,11 +5,9 @@ using namespace drill;
 
 void dxmaterial::defined() {
   handle = REQUIRE(drill::context).get_info<dxhandle_t>();
-}
-
-void dxmaterial::init() {
-  _color = { 1.0, 1.0, 1.0, 1.0 };
   compile(CFG_DX_MATERIAL_PS_PATH, "PSMaterial", DXSHADER_PIXEL);
+
+  _color = { 1.0, 1.0, 1.0, 1.0 };
 
   D3D11_BUFFER_DESC bd;
   ZeroMemory(&bd, sizeof(bd));

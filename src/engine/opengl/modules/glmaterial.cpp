@@ -5,7 +5,7 @@
 
 using namespace drill;
 
-void glmaterial::init() {
+void glmaterial::defined() {
   compile(file_system::read_text_file(CFG_GL_MATERIAL_FS_PATH), GLSHADER_FRAGMENT);
   color({ 1.0, 1.0, 1.0, 1.0 });
 }

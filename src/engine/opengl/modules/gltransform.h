@@ -7,9 +7,8 @@
 namespace drill {
   class gltransform : public glshader, public transform {
   public:
-    void init();
     void link_to(linker *l) { glshader::link_to(l); }
-    void defined() {}
+    void defined();
     void ready();
 
     transform& model_identity();

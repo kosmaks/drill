@@ -8,8 +8,8 @@ namespace drill {
   public:
     glrenderer();
     virtual ~glrenderer();
+    void defined();
 
-    void init();
     void update(const timeinfo_t& timeinfo);
   };
 }
