@@ -16,6 +16,8 @@ namespace drill {
   private:
     vector4_t _color;
 
+    ID3D11Texture2D *_texture;
+    ID3D11ShaderResourceView *texture_srv;
     ID3D11Buffer *buffer;
   };
 }

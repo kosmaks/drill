@@ -40,12 +40,12 @@ public:
     transform = require<drill::transform>();
     material = require<drill::material>();
 
-    reader.load_from_file("dist/wbox.obj");
+    reader.load_from_file("dist/ppsh.obj");
     LOG_INFO("loading from object");
     box = reader.to_object();
     c_box = compiler().compile(box);
 
-    png_reader.load_from_file("dist/texture.png");
+    png_reader.load_from_file("dist/ppsh.png");
     texture = png_reader.to_texture();
     material().use_texture(texture);
 
@@ -61,21 +61,15 @@ public:
   void update(const drill::timeinfo_t &time) {
     linker()
       .update(transform().model_identity()
+                         .view_identity()
+                         .view_rotate({ 1.0, 0.0, 0.0, 10 })
+                         .view_translate({ 0.0, -2.0, -1.0 })
+                         .model_scale({ 0.1, 0.1, 0.1 })
                          .model_translate({ 0.0, 0.0, -(angle) })
-                         .model_rotate({ 0.0, 1.0, 0.0, 100 * (angle) })
+                         .model_rotate({ 0.0, 1.0, 0.0, 10 * (angle += 0.05) })
                          .projection_identity()
                          .projection_install(0.1, 100.0, 640.0 / 480.0, 60))
-      .update(material().color({ 1.0, 0.5, 0.0, 1.0 }))
-      .use();
-    c_box->render();
-
-    linker()
-      .update(transform().model_identity()
-                         .model_rotate({ 0.0, 1.0, 0.0, 100 * (angle) })
-                         .model_translate({ 0.0, 0.0, (angle += 0.01) })
-                         .projection_identity()
-                         .projection_install(0.1, 100.0, 640.0 / 480.0, 60))
-      .update(material().color({ 0.0, 0.5, 1.0, 1.0 }))
+      .update(material())
       .use();
     c_box->render();
   }
