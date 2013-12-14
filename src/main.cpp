@@ -20,12 +20,12 @@ public:
     transform = require<drill::transform>();
     material = require<drill::material>();
 
-    reader.load_from_file("dist/ppsh.obj");
+    reader.load_from_file("dist/wbox.obj");
     LOG_INFO("loading from object");
     box = reader.to_object();
     c_box = compiler().compile(box);
 
-    png_reader.load_from_file("dist/ppsh.png");
+    png_reader.load_from_file("dist/texture.png");
     texture = png_reader.to_texture();
     material().use_texture(texture);
 
@@ -41,9 +41,7 @@ public:
   void update(const drill::timeinfo_t &time) {
     linker()
       .update(transform().model_identity()
-                         .model_scale({ 0.1, 0.1, 0.1 })
-                         .model_translate({ 0.0, 0.0, -(angle) })
-                         .model_rotate({ 0.0, 1.0, 0.0, 10 * (angle += 0.05) }))
+                         .model_rotate({ 0.0, 1.0, 0.0, (angle += 0.1) }))
       .update(material())
       .use();
     c_box->render();
@@ -101,6 +99,10 @@ int main() {
 
   dxcamera.set_scene(dxscene);
   dxmy.set_scene(dxscene);
+
+  dxcamera.look_at({ 0, 3, 3 }, 
+                   { 0, 0, 0 }, 
+                   { 0, 1, 0 });
 #endif
 
 #ifdef OPENGL
@@ -135,6 +137,10 @@ int main() {
 
   glcamera.set_scene(glscene);
   glmy.set_scene(glscene);
+
+  glcamera.look_at({ 0, 3, 3 }, 
+                   { 0, 0, 0 }, 
+                   { 0, 1, 0 });
 #endif
 
   app.run();

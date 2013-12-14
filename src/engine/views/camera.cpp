@@ -10,16 +10,22 @@ void camera::init() {
   set_fov(60.0);
   set_near_cp(0.1);
   set_far_cp(100.0);
+  look_at({ 0, 0, 0 },
+          { 0, 0, 0 },
+          { 0, 1, 0 });
 }
 
 void camera::update(const drill::timeinfo_t &time) {
   _transform().view_identity()
               .projection_identity()
-              .view_rotate({ 1.0, 0.0, 0.0, 10 })
-              .view_translate({ 0.0, -2.0, -1.0 })
+              .view_install(_position, _target, _up)
               .projection_install(_near, _far, _aspect, _fov);
 }
 
-void camera::look_at(vector3_t pos, vector3_t target, vector3_t up) {
+void camera::look_at(const vector3_t &pos, 
+                     const vector3_t &target, 
+                     const vector3_t &up) {
   _position = pos;
+  _target = target;
+  _up = up;
 }

@@ -43,18 +43,12 @@ transform& gltransform::model_scale(const vector3_t &v) {
   return *this;
 }
 
-transform& gltransform::view_translate(const vector3_t &v) {
-  m_view *= glm::translate(v.x, v.y, v.z);
-  return *this;
-}
-
-transform& gltransform::view_rotate(const vector4_t &v) {
-  m_view *= glm::rotate(v.w, v.x, v.y, v.z);
-  return *this;
-}
-
-transform& gltransform::view_scale(const vector3_t &v) {
-  m_view *= glm::scale(v.x, v.y, v.z);
+transform& gltransform::view_install(const vector3_t &position, 
+                                     const vector3_t &target, 
+                                     const vector3_t &up) {
+  m_view = glm::lookAt((const glm::vec3&)position, 
+                       (const glm::vec3&)target, 
+                       (const glm::vec3&)up);
   return *this;
 }
 

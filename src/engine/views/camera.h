@@ -19,15 +19,15 @@ namespace drill {
     inline float get_aspect()         { return _aspect; }
 
     // position
-    void look_at(vector3_t pos, vector3_t target, vector3_t up);
+    void look_at(const vector3_t &pos, 
+                 const vector3_t &target, 
+                 const vector3_t &up);
 
   private:
     field<context> _context;
     field<transform> _transform;
 
     float _aspect, _fov, _near, _far;
-
-    vector3_t _position, _rotation;
-    
+    vector3_t _position, _target, _up;
   };
 }
