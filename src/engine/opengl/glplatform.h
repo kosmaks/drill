@@ -5,9 +5,9 @@
 #include "engine/opengl.h"
 
 namespace drill {
-  class glplatform : public service, public platform {
+  class glplatform : public platform {
   public:
-    void init() {
+    glplatform() : platform() {
       define<context>(_glcontext);
       define<renderer>(_glrenderer);
       define<compiler>(_glcompiler);
@@ -15,11 +15,7 @@ namespace drill {
       define<transform>(_gltransform);
       define<color>(_glcolor);
       define<material>(_glmaterial);
-      //define<input>(_glinput);
-    }
-
-    void update(const timeinfo_t &time) {
-      _glrenderer.update(time);
+      define<input>(_glinput);
     }
 
   private:
@@ -30,6 +26,6 @@ namespace drill {
     drill::gltransform _gltransform;
     drill::glcolor _glcolor;
     drill::glmaterial _glmaterial;
-    //drill::glinput _glinput;
+    drill::glinput _glinput;
   };
 }

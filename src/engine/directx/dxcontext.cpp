@@ -6,10 +6,14 @@ using namespace drill;
 #define DXD(x) { auto k = (x); if (FAILED(k)) LOG_ERROR("HRESULT = FAILED"); }
 
 LRESULT CALLBACK WindowProc(HWND h_wnd, UINT message, WPARAM w_param, LPARAM l_param) {
-    switch(message) {
-    }
+  winapi_router_t *router = (winapi_router_t*)GetWindowLongPtr(h_wnd, GWLP_USERDATA);
 
-    return DefWindowProc(h_wnd, message, w_param, l_param);
+  switch(message) {
+    case WM_KEYDOWN: router->keydown(w_param, l_param); break;
+    case WM_KEYUP: router->keyup(w_param, l_param); break;
+  }
+
+  return DefWindowProc(h_wnd, message, w_param, l_param);
 }
 
 dxcontext::dxcontext(const std::string &title, int width, int height) {
@@ -42,6 +46,7 @@ dxcontext::dxcontext(const std::string &title, int width, int height) {
                          h_instance,
                          NULL);
 
+  SetWindowLongPtr(h_wnd, GWLP_USERDATA, (LONG)&router);
 }
 
 dxcontext::~dxcontext() {
@@ -72,6 +77,8 @@ void dxcontext::swap_buffers() {
 void* dxcontext::info(size_t hash) {
   if (hash == typeid(dxhandle_t).hash_code()) {
     return &handle;
+  } else if (hash == typeid(winapi_router_t).hash_code()) {
+    return &router;
   } else {
     return nullptr;
   }

@@ -4,7 +4,7 @@
 using namespace drill;
 
 void dxcolor::defined() {
-  handle = REQUIRE(drill::context).get_info<dxhandle_t>();
+  handle = require<drill::context>().get_info<dxhandle_t>();
   compile(CFG_DX_COLOR_PS_PATH, "PSColor", DXSHADER_PIXEL);
 
   D3D11_BUFFER_DESC bd;

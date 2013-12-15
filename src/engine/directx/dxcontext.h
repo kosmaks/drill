@@ -9,6 +9,11 @@ namespace drill {
     ID3D11DeviceContext *devcon;
   } dxhandle_t;
 
+  typedef struct {
+    std::function<void(WPARAM, LPARAM)> keydown;
+    std::function<void(WPARAM, LPARAM)> keyup;
+  } winapi_router_t;
+
   class dxcontext : public context {
   public:
     dxcontext(const std::string &title = "DirectX Context", 
@@ -31,6 +36,7 @@ namespace drill {
     MSG msg;
 
     dxhandle_t handle;
+    winapi_router_t router;
 
     IDXGISwapChain *swapchain;
     ID3D11RenderTargetView *backbuffer;

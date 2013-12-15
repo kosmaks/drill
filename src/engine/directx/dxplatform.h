@@ -5,9 +5,9 @@
 #include "engine/directx.h"
 
 namespace drill {
-  class dxplatform : public service, public platform {
+  class dxplatform : public platform {
   public:
-    void init() {
+    dxplatform() : platform() {
       define<context>(_dxcontext);
       define<renderer>(_dxrenderer);
       define<compiler>(_dxcompiler);
@@ -15,10 +15,7 @@ namespace drill {
       define<transform>(_dxtransform);
       define<color>(_dxcolor);
       define<material>(_dxmaterial);
-    }
-
-    void update(const timeinfo_t &time) {
-      _dxrenderer.update(time);
+      define<input>(_dxinput);
     }
 
   private:
@@ -29,5 +26,6 @@ namespace drill {
     drill::dxtransform _dxtransform;
     drill::dxcolor _dxcolor;
     drill::dxmaterial _dxmaterial;
+    drill::dxinput _dxinput;
   };
 }

@@ -5,6 +5,7 @@
 #include "directx/dxheaders.h"
 #include "directx/dxlinker.h"
 #include "directx/dxrenderer.h"
+#include "directx/dxinput.h"
 
 #include "directx/modules/dxcolor.h"
 #include "directx/modules/dxmaterial.h"

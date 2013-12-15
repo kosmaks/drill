@@ -14,9 +14,10 @@ glcontext::glcontext(const std::string &title, int width, int height) {
 
   glinit(); 
   glfwSetErrorCallback(glfw_error_callback);
-  _window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+  router.window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+  glfwSetWindowUserPointer(router.window, &router);
 
-  if (!_window) {
+  if (!router.window) {
     LOG_ERROR("Unable to create GLFW context");
     return;
   }
@@ -24,15 +25,23 @@ glcontext::glcontext(const std::string &title, int width, int height) {
 }
 
 void glcontext::load() {
-  glfwMakeContextCurrent(_window);
+  glfwMakeContextCurrent(router.window);
   LOG_DEBUG("OpenGL context is set");
 }
 
 void glcontext::swap_buffers() {
-  glfwSwapBuffers(_window);
+  glfwSwapBuffers(router.window);
   glfwPollEvents();
 }
 
 void glcontext::clear_screen() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void *glcontext::info(size_t hash) {
+  if (hash == typeid(glfw_router_t).hash_code()) {
+    return &router;
+  } else {
+    return nullptr;
+  }
 }

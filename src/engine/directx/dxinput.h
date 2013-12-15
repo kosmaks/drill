@@ -1,10 +1,10 @@
 #pragma once
 
 #include "engine/virtual/input.h"
-#include "glcontext.h"
+#include "dxcontext.h"
 
 namespace drill {
-  class glinput : public input {
+  class dxinput : public input {
   public:
     void defined();
     void update(const timeinfo_t &time);
@@ -16,9 +16,12 @@ namespace drill {
 
 
   private:
-    glcontext::glfw_router_t *router;
+    winapi_router_t *router;
 
-    void keyfun(int32_t key, int action);
+    void keydown(WPARAM w, LPARAM l);
+    void keyup(WPARAM w, LPARAM l);
+
+    void set_key(uint32_t key);
 
     int32_t _key;
     uint32_t _mouse_x, _mouse_y;
