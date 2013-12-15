@@ -10,7 +10,6 @@ scene::~scene() {
 
 void scene::add_service(service* s) {
   _services.push_back(s);
-  s->init();
 }
 
 void scene::update(const timeinfo_t &timeinfo) {

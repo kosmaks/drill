@@ -17,8 +17,8 @@ namespace drill {
   class dxcontext : public context {
   public:
     dxcontext(const std::string &title = "DirectX Context", 
-              int width=640, 
-              int height=480);
+              int width=1200, 
+              int height=800);
     ~dxcontext();
     void load();
     void swap_buffers();

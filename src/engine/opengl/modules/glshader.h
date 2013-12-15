@@ -14,7 +14,10 @@ namespace drill {
     } type_t;
     virtual ~glshader() {}
 
-    virtual void link_to(linker *l);
+    void defined() {}
+    void link_to(linker *l);
+    void flush(c_program *p);
+    virtual void flush() = 0;
 
   protected:
     uint32_t shader_id, prog_id; 

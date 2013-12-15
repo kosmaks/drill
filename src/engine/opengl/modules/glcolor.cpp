@@ -8,7 +8,7 @@ void glcolor::defined() {
   compile(file_system::read_text_file(CFG_GL_COLOR_FS_PATH), GLSHADER_FRAGMENT);
 }
 
-void glcolor::ready() {
+void glcolor::flush() {
   pass_param("color", value);
 }
 

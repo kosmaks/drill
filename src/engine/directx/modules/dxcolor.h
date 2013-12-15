@@ -6,9 +6,10 @@
 namespace drill {
   class dxcolor : public dxshader, public color {
   public:
-    void link_to(linker *l) { _link_to(l); }
+    void link_to(linker *l) { dxshader::link_to(l); }
+    void flush(c_program *p) { dxshader::flush(p); }
     void defined();
-    void ready();
+    void flush();
 
   private:
     ID3D11Buffer *buffer;

@@ -5,13 +5,18 @@
 
 namespace drill {
   class module;
+
+  class c_program {
+  public:
+    virtual ~c_program() {}
+    virtual void use() = 0;
+  };
+
   class linker : public dependency {
   public:
     virtual ~linker() {};
     virtual linker& begin() = 0;
     virtual linker& include(module &m) = 0;
-    virtual linker& end() = 0;
-    virtual linker& use() = 0;
-    virtual linker& update(module &m) = 0;
+    virtual c_program* create() = 0;
   };
 }

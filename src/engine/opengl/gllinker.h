@@ -3,17 +3,22 @@
 #include "engine/virtual/linker.h"
 
 namespace drill {
+  class glc_program : public c_program {
+  public:
+    void use();
+    uint32_t shader_program;
+  };
+
   class gllinker : public linker {
   public:
-    linker& begin();
-    linker& include(module &m);
-    linker& end();
-    linker& use();
-
-    linker& update(module &m);
     void defined() {}
 
-    uint32_t c_shader_program();
+    linker& begin();
+    linker& include(module &m);
+
+    c_program* create();
+
+    uint32_t c_shader_program() { return shader_program; }
 
   private:
     uint32_t shader_program;

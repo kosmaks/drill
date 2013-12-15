@@ -10,3 +10,4 @@
 #include "directx/modules/dxcolor.h"
 #include "directx/modules/dxmaterial.h"
 #include "directx/modules/dxtransform.h"
+#include "directx/modules/dxdilate.h"

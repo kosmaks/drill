@@ -7,3 +7,4 @@
 #define CFG_DX_TRANSFORM_VS_PATH ("dist/dx/transform_vs.hlsl")
 #define CFG_DX_MATERIAL_PS_PATH ("dist/dx/material_ps.hlsl")
 #define CFG_DX_COLOR_PS_PATH ("dist/dx/color_ps.hlsl")
+#define CFG_DX_DILATE_GS_PATH ("dist/dx/dilate_gs.hlsl")

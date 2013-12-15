@@ -6,10 +6,11 @@
 
 namespace drill {
   class linker;
+  class c_program;
   class module : public dependency {
   public:
     virtual ~module() {}
     virtual void link_to(linker *l) = 0;
-    virtual void ready() {}
+    virtual void flush(c_program *p) = 0;
   };
 }

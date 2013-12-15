@@ -29,17 +29,23 @@ transform& gltransform::view_identity() {
 }
 
 transform& gltransform::model_translate(const vector3_t& v) {
-  m_model *= glm::translate(v.x, v.y, v.z);
+  if (v.x != 0 || v.y != 0 || v.z != 0) {
+    m_model *= glm::translate(v.x, v.y, v.z);
+  }
   return *this;
 }
 
 transform& gltransform::model_rotate(const vector4_t &v) {
-  m_model *= glm::rotate(v.w, v.x, v.y, v.z);
+  if (v.x != 0 || v.y != 0 || v.z != 0) {
+    m_model *= glm::rotate(v.w, v.x, v.y, v.z);
+  }
   return *this;
 }
 
 transform& gltransform::model_scale(const vector3_t &v) {
-  m_model *= glm::scale(v.x, v.y, v.z);
+  if (v.x != 1 || v.y != 1 || v.z != 1) {
+    m_model *= glm::scale(v.x, v.y, v.z);
+  }
   return *this;
 }
 
@@ -57,7 +63,7 @@ transform& gltransform::projection_install(coord_t n, coord_t f, float aspect, f
   return *this;
 }
 
-void gltransform::ready() {
+void gltransform::flush() {
   pass_param("m_model", m_model);
   pass_param("m_projection", m_projection);
   pass_param("m_view", m_view);

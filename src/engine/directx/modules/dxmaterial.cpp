@@ -3,6 +3,12 @@
 
 using namespace drill;
 
+dxmaterial::~dxmaterial() {
+  for (std::pair<void*, dxc_texture*> kv : _pool) {
+    delete kv.second;
+  }
+}
+
 void dxmaterial::defined() {
   handle = REQUIRE(drill::context).get_info<dxhandle_t>();
   compile(CFG_DX_MATERIAL_PS_PATH, "PSMaterial", DXSHADER_PIXEL);
@@ -19,7 +25,7 @@ void dxmaterial::defined() {
   handle->dev->CreateBuffer(&bd, NULL, &buffer);
 }
 
-material& dxmaterial::use_texture(const texture &texture) {
+c_texture* dxmaterial::compile_texture(texture &texture) {
 
   D3D11_TEXTURE2D_DESC desc;
   desc.Width = texture.get_width();
@@ -39,26 +45,18 @@ material& dxmaterial::use_texture(const texture &texture) {
   res.SysMemPitch = (UINT) (texture.get_format() * texture.get_width());
   res.SysMemSlicePitch = (UINT) (texture.get_format() * texture.get_width() * texture.get_height());
 
-  D3D11_SAMPLER_DESC samp;
-  ZeroMemory(&samp, sizeof(D3D11_SAMPLER_DESC));
-  samp.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-  samp.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-  samp.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-  samp.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-  samp.ComparisonFunc = D3D11_COMPARISON_NEVER;
-  samp.MinLOD = 0;
-  samp.MaxLOD = D3D11_FLOAT32_MAX;
-
   if (FAILED(handle->dev->CreateTexture2D(&desc, &res, &_texture))) {
     LOG_ERROR("Failed to create texture");
-    return *this;
+    return nullptr;
   }
 
   if (FAILED(handle->dev->CreateShaderResourceView(_texture, NULL, &texture_srv))) {
     LOG_ERROR("Failed to create texture resource");
   }
 
-  return *this;
+  auto ct = new dxc_texture(handle->devcon, texture_srv);
+  if (_pool[&texture]) delete _pool[&texture];
+  return (_pool[&texture] = ct);
 }
 
 material& dxmaterial::color(const vector4_t &color) {
@@ -66,7 +64,12 @@ material& dxmaterial::color(const vector4_t &color) {
   return *this;
 }
 
-void dxmaterial::ready() {
+material& dxmaterial::use_texture(c_texture *c_texture) {
+  c_texture->use();
+  return *this;
+}
+
+void dxmaterial::flush() {
   D3D11_MAPPED_SUBRESOURCE ms;
   handle->devcon->Map(buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
   memcpy(ms.pData, &_color, sizeof(_color));
@@ -74,5 +77,11 @@ void dxmaterial::ready() {
 
   ID3D11Buffer *buffers[] = { buffer };
   handle->devcon->PSSetConstantBuffers(0, 1, &buffer);
-  handle->devcon->PSSetShaderResources(0, 1, &texture_srv);
+}
+
+dxc_texture::dxc_texture(ID3D11DeviceContext *d, ID3D11ShaderResourceView *t) :
+  c_texture(), devcon(d), texture_srv(t) {}
+
+void dxc_texture::use() { 
+  devcon->PSSetShaderResources(0, 1, &texture_srv);
 }

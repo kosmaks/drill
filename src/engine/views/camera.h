@@ -18,10 +18,12 @@ namespace drill {
     inline float get_fov()            { return _fov; } 
     inline float get_aspect()         { return _aspect; }
 
+    inline const vector3_t& get_target() { return _target; }
+
     // position
-    void look_at(const vector3_t &pos, 
-                 const vector3_t &target, 
-                 const vector3_t &up);
+    void look_at(vector3_t pos, 
+                 vector3_t target, 
+                 vector3_t up);
 
   private:
     field<context> _context;

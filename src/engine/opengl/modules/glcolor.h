@@ -7,7 +7,8 @@ namespace drill {
   class glcolor : public glshader, public color {
   public:
     void link_to(linker *l) { glshader::link_to(l); }
-    void ready();
+    void flush(c_program *p) { glshader::flush(p); }
+    void flush();
     void defined();
   };
 }

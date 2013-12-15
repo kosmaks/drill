@@ -24,8 +24,8 @@ namespace drill {
   class ehandler {
   public:
     typedef std::function<void()> callback_t;
-    ehandler(callback_t cb) : _cb(cb) {}
 
+    callback_t operator=(callback_t cb) { return _cb = cb; }
     void operator()() { _cb(); } 
 
   private:

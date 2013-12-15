@@ -17,7 +17,7 @@ void dxcolor::defined() {
   handle->dev->CreateBuffer(&bd, NULL, &buffer);
 }
 
-void dxcolor::ready() {
+void dxcolor::flush() {
   D3D11_MAPPED_SUBRESOURCE ms;
   handle->devcon->Map(buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
   memcpy(ms.pData, &value, sizeof(value));

@@ -16,16 +16,18 @@ namespace drill {
       define<color>(_dxcolor);
       define<material>(_dxmaterial);
       define<input>(_dxinput);
+      define<dilate>(_dxdilate);
     }
 
   private:
-    drill::dxcontext _dxcontext;
-    drill::dxrenderer _dxrenderer;
-    drill::dxcompiler _dxcompiler;
-    drill::dxlinker _dxlinker;
-    drill::dxtransform _dxtransform;
-    drill::dxcolor _dxcolor;
-    drill::dxmaterial _dxmaterial;
-    drill::dxinput _dxinput;
+    dxcontext _dxcontext;
+    dxrenderer _dxrenderer;
+    dxcompiler _dxcompiler;
+    dxlinker _dxlinker;
+    dxtransform _dxtransform;
+    dxcolor _dxcolor;
+    dxmaterial _dxmaterial;
+    dxinput _dxinput;
+    dxdilate _dxdilate;
   };
 }

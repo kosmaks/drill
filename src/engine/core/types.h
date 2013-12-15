@@ -38,6 +38,7 @@ namespace drill {
     vector3_t vertex;
     vector2_t texture;
     vector3_t normal;
+    vector4_t color;
   } vertex_t;
 
   typedef struct {

@@ -19,13 +19,13 @@ namespace drill {
     }
 
   private:
-    drill::glcontext  _glcontext;
-    drill::glrenderer _glrenderer;
-    drill::glcompiler _glcompiler;
-    drill::gllinker _gllinker;
-    drill::gltransform _gltransform;
-    drill::glcolor _glcolor;
-    drill::glmaterial _glmaterial;
-    drill::glinput _glinput;
+    glcontext  _glcontext;
+    glrenderer _glrenderer;
+    glcompiler _glcompiler;
+    gllinker _gllinker;
+    gltransform _gltransform;
+    glcolor _glcolor;
+    glmaterial _glmaterial;
+    glinput _glinput;
   };
 }

@@ -10,6 +10,7 @@ namespace drill {
     public: 
       virtual ~c_object() {}
       virtual void render() = 0; 
+      virtual void free() = 0;
   }; 
 
   class compiler : public dependency {

@@ -20,6 +20,7 @@
 #include "virtual/modules/color.h"
 #include "virtual/modules/material.h"
 #include "virtual/modules/transform.h"
+#include "virtual/modules/dilate.h"
 
 #include "opengl/glplatform.h"
 #include "directx/dxplatform.h"

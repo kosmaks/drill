@@ -1,12 +1,17 @@
 #pragma once
 
+#include <GL/glew.h>
 #include "engine/virtual/compiler.h"
 
 namespace drill {
   class glc_object : public c_object { 
-    public: 
-      void render(); 
-      uint32_t vertices, count;
+  public: 
+    void render(); 
+    void free() {}
+    uint32_t triangles, triangles_count;
+    uint32_t points, points_count;
+  private:
+    inline void use_buffer(uint32_t id, uint32_t count, GLenum mode);
   };
 
   class glcompiler : public compiler {

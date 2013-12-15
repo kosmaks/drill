@@ -7,9 +7,10 @@
 namespace drill {
   class dxtransform : public dxshader, public transform {
   public:
-    void link_to(linker *l) { _link_to(l); }
+    void link_to(linker *l) { dxshader::link_to(l); }
+    void flush(c_program *p) { dxshader::flush(p); }
     void defined();
-    void ready();
+    void flush();
 
     transform& model_identity();
     transform& model_translate(const vector3_t &v);

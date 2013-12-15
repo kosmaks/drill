@@ -13,11 +13,6 @@ void dxtransform::defined() {
   projection_identity();
   view_identity();
 
-  LOG_DEBUG(state.m_model(0, 0) << " " << state.m_model(1, 0) << " " << state.m_model(2, 0) << " " << state.m_model(3, 0));
-  LOG_DEBUG(state.m_model(0, 1) << " " << state.m_model(1, 1) << " " << state.m_model(2, 1) << " " << state.m_model(3, 1));
-  LOG_DEBUG(state.m_model(0, 2) << " " << state.m_model(1, 2) << " " << state.m_model(2, 2) << " " << state.m_model(3, 2));
-  LOG_DEBUG(state.m_model(0, 3) << " " << state.m_model(1, 3) << " " << state.m_model(2, 3) << " " << state.m_model(3, 3));
-
   D3D11_BUFFER_DESC bd;
   ZeroMemory(&bd, sizeof(bd));
   bd.Usage = D3D11_USAGE_DYNAMIC;
@@ -80,7 +75,7 @@ transform& dxtransform::projection_install(coord_t n, coord_t f, float aspect, f
   return *this;
 }
 
-void dxtransform::ready() {
+void dxtransform::flush() {
   D3D11_MAPPED_SUBRESOURCE ms;
   handle->devcon->Map(buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
   state_t *s = (state_t*)ms.pData;

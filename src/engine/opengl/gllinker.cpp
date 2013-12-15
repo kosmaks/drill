@@ -5,6 +5,7 @@ using namespace drill;
 
 linker& gllinker::begin() {
   shader_program = glCreateProgram();
+  LOG_DEBUG("glCreateProgram() -> " << shader_program);
   return *this;
 }
 
@@ -13,21 +14,15 @@ linker& gllinker::include(module &m) {
   return *this;
 }
 
-linker& gllinker::end() {
+c_program* gllinker::create() {
   glLinkProgram(shader_program);
-  return *this;
+  LOG_DEBUG("glLinkProgram(" << shader_program << ")");
+  glc_program* prog = new glc_program();
+  prog->shader_program = shader_program;
+  return prog;
 }
 
-uint32_t gllinker::c_shader_program() {
-  return shader_program;
-}
-
-linker& gllinker::use() {
+void glc_program::use() {
   glUseProgram(shader_program);
-  return *this;
-}
-
-linker& gllinker::update(module &m) {
-  m.ready();
-  return *this;
+  LOG_DEBUG("glUseProgram(" << shader_program << ")");
 }
