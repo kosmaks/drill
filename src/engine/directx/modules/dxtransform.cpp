@@ -70,6 +70,28 @@ transform& dxtransform::view_install(const vector3_t &position,
   return *this;
 }
 
+transform& dxtransform::view_translate(const vector3_t &v) {
+  D3DXMATRIX translation;
+  D3DXMatrixTranslation(&translation, v.x, v.y, v.z);
+  state.m_view = translation * state.m_view;
+  return *this;
+}
+
+transform& dxtransform::view_rotate(const vector4_t &v) {
+  D3DXMATRIX rotate;
+  D3DXMatrixRotationAxis(&rotate, (const D3DXVECTOR3*)&v, TO_RAD(v.w));
+  state.m_view = rotate * state.m_view;
+  return *this;
+}
+
+transform& dxtransform::view_scale(const vector3_t &v) {
+  D3DXMATRIX scaling;
+  D3DXMatrixScaling(&scaling, v.x, v.y, v.z);
+  state.m_view = scaling * state.m_view;
+  return *this;
+}
+
+
 transform& dxtransform::projection_install(coord_t n, coord_t f, float aspect, float fov) {
   D3DXMatrixPerspectiveFovRH(&state.m_projection, TO_RAD(fov), aspect, n, f);
   return *this;

@@ -16,6 +16,9 @@ namespace drill {
     virtual transform& view_install(const vector3_t &position, 
                                     const vector3_t &target, 
                                     const vector3_t &up) = 0;
+    virtual transform& view_translate(const vector3_t &v) = 0;
+    virtual transform& view_rotate   (const vector4_t &v) = 0;
+    virtual transform& view_scale    (const vector3_t &v) = 0;
 
     virtual transform& projection_identity() = 0;
     virtual transform& projection_install(coord_t near, coord_t far, float aspect, float fov) = 0;

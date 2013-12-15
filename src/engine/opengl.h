@@ -9,3 +9,4 @@
 #include "opengl/modules/glcolor.h"
 #include "opengl/modules/glmaterial.h"
 #include "opengl/modules/gltransform.h"
+#include "opengl/modules/gldilate.h"

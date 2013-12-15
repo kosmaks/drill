@@ -42,9 +42,8 @@ c_texture* glmaterial::compile_texture(texture &texture) {
 
 material& glmaterial::use_texture(c_texture *c_texture) {
   if (c_texture == nullptr) {
-    c_texture->use();
   } else {
-
+    c_texture->use();
   }
   return *this;
 }

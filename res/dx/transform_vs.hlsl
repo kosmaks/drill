@@ -8,7 +8,6 @@ struct VOut {
   float4 position : SV_POSITION;
   float2 texcoord : TEXCOORD;
   float4 normal : NORMAL;
-  float3 light0 : LIGHT0;
 };
 
 VOut VSTransform(float3 position : POSITION, 
@@ -22,7 +21,6 @@ VOut VSTransform(float3 position : POSITION,
   output.position = mul(PVM, float4(position, 1.0));
   output.normal = mul(VM, float4(normal, 0.0));
   output.texcoord = texcoord;
-  output.light0 = mul(VM, float4(0, 1, 1, 0)).xyz;
 
   return output;
 }

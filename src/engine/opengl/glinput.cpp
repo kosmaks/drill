@@ -21,9 +21,9 @@ void glinput::defined() {
 
 void glinput::keyfun(int32_t key, int action) {
   _key = key;
-  if (action == GLFW_PRESS) {
-    on_keydown.trigger();
-  } else if (action == GLFW_RELEASE) {
+  if (action == GLFW_RELEASE) {
     on_keyup.trigger();
+  } else {
+    on_keydown.trigger();
   }
 }

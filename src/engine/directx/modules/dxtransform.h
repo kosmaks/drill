@@ -21,6 +21,9 @@ namespace drill {
     transform& view_install(const vector3_t &position, 
                             const vector3_t &target, 
                             const vector3_t &up);
+    transform& view_translate(const vector3_t &v);
+    transform& view_rotate   (const vector4_t &v);
+    transform& view_scale    (const vector3_t &v);
 
     transform& projection_identity();
     transform& projection_install(coord_t near, coord_t far, float aspect, float fov);

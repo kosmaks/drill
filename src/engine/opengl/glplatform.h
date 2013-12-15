@@ -16,6 +16,7 @@ namespace drill {
       define<color>(_glcolor);
       define<material>(_glmaterial);
       define<input>(_glinput);
+      define<dilate>(_gldilate);
     }
 
   private:
@@ -27,5 +28,6 @@ namespace drill {
     glcolor _glcolor;
     glmaterial _glmaterial;
     glinput _glinput;
+    gldilate _gldilate;
   };
 }

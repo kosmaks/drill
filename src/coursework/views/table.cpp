@@ -51,6 +51,5 @@ void table_view::update(const drill::timeinfo_t &time) {
             .color({ 1, 1, 1, 1 })
             .flush(c_program);
 
-  LOG_DEBUG("drawing table");
   c_object->render();
 }

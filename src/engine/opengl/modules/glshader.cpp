@@ -7,7 +7,6 @@ void glshader::link_to(linker *l) {
   gllinker *gll = (gllinker*)l;
   prog_id = gll->c_shader_program();
   glAttachShader(prog_id, shader_id);
-  LOG_DEBUG("glAttachShader(" << prog_id << ", " << shader_id << ")");
 }
 
 void glshader::flush(c_program *l) {
@@ -37,31 +36,25 @@ void glshader::compile(const std::string &source, glshader::type_t type) {
 }
 
 void glshader::pass_param(const std::string &name, float value) {
-  LOG_DEBUG("glUniform1f(glGetUniformLocation(" << prog_id << ", ...), ...)");
   glUniform1f(glGetUniformLocation(prog_id, name.c_str()), value);
 }
 
 void glshader::pass_param(const std::string &name, uint32_t value) {
-  LOG_DEBUG("glUniform1f(glGetUniformLocation(" << prog_id << ", ...), ...)");
   glUniform1i(glGetUniformLocation(prog_id, name.c_str()), value);
 }
 
 void glshader::pass_param(const std::string &name, const vector4_t &value) {
-  LOG_DEBUG("glUniform1f(glGetUniformLocation(" << prog_id << ", ...), ...)");
   glUniform4fv(glGetUniformLocation(prog_id, name.c_str()), 1, (const float*)&value);
 }
 
 void glshader::pass_param(const std::string &name, const vector3_t &value) {
-  LOG_DEBUG("glUniform1f(glGetUniformLocation(" << prog_id << ", ...), ...)");
   glUniform3fv(glGetUniformLocation(prog_id, name.c_str()), 1, (const float*)&value);
 }
 
 void glshader::pass_param(const std::string &name, const vector2_t &value) {
-  LOG_DEBUG("glUniform1f(glGetUniformLocation(" << prog_id << ", ...), ...)");
   glUniform2fv(glGetUniformLocation(prog_id, name.c_str()), 1, (const float*)&value);
 }
 
 void glshader::pass_param(const std::string &name, const glm::mat4 &value) {
-  LOG_DEBUG("glUniform1f(glGetUniformLocation(" << prog_id << ", ...), ...)");
   glUniformMatrix4fv(glGetUniformLocation(prog_id, name.c_str()), 1, false, (const float*)&value);
 }

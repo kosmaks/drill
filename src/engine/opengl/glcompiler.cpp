@@ -14,12 +14,10 @@ c_object* glcompiler::compile(object &obj) {
   glc_object *r = _pool[&obj];
   if (r == nullptr) { _pool[&obj] = r = new glc_object(); }
 
-  LOG_INFO("Drawing " << obj.get_triangles_count() << " triangles");
   r->triangles = generate_vbo(obj.get_triangles(), 
                    sizeof(vertex_t) * obj.get_triangles_count());
   r->triangles_count = obj.get_triangles_count();
 
-  LOG_INFO("Drawing " << obj.get_points_count() << " points");
   r->points = generate_vbo(obj.get_points(), 
                    sizeof(vertex_t) * obj.get_points_count());
   r->points_count = obj.get_points_count();

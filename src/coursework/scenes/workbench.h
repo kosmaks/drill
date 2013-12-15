@@ -20,7 +20,8 @@ private:
   table_view table;
   billet_view billet;
 
-  drill::vector3_t target, source;
+  drill::vector3_t position, rotation;
+
   drill::ehandler h_keydown;
   void keydown();
 };

@@ -58,6 +58,27 @@ transform& gltransform::view_install(const vector3_t &position,
   return *this;
 }
 
+transform& gltransform::view_translate(const vector3_t& v) {
+  if (v.x != 0 || v.y != 0 || v.z != 0) {
+    m_view *= glm::translate(v.x, v.y, v.z);
+  }
+  return *this;
+}
+
+transform& gltransform::view_rotate(const vector4_t &v) {
+  if (v.x != 0 || v.y != 0 || v.z != 0) {
+    m_view *= glm::rotate(v.w, v.x, v.y, v.z);
+  }
+  return *this;
+}
+
+transform& gltransform::view_scale(const vector3_t &v) {
+  if (v.x != 1 || v.y != 1 || v.z != 1) {
+    m_view *= glm::scale(v.x, v.y, v.z);
+  }
+  return *this;
+}
+
 transform& gltransform::projection_install(coord_t n, coord_t f, float aspect, float fov) {
   m_projection = glm::perspective(fov, aspect, n, f);
   return *this;

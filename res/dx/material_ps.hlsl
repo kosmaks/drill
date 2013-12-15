@@ -12,8 +12,7 @@ SamplerState linear_sampler {
 
 float4 PSMaterial(float4 position : SV_POSITION, 
                   float2 texcoord : TEXCOORD, 
-                  float3 normal : NORMAL,
-                  float3 light0 : LIGHT0) : SV_TARGET {
+                  float3 normal : NORMAL) : SV_TARGET {
   /*float intensity = dot(light0, normal.xyz);*/
   float intensity = 1;
   float4 color = intensity * buffer * basic_texture.Sample(linear_sampler, texcoord);

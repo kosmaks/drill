@@ -20,10 +20,16 @@ namespace drill {
 
     inline const vector3_t& get_target() { return _target; }
 
+    void set_position(const vector3_t& p);
+    void set_rotation_x(float angle);
+    void set_rotation_y(float angle);
+    void set_rotation_z(float angle);
+
     // position
     void look_at(vector3_t pos, 
                  vector3_t target, 
                  vector3_t up);
+
 
   private:
     field<context> _context;
@@ -31,5 +37,9 @@ namespace drill {
 
     float _aspect, _fov, _near, _far;
     vector3_t _position, _target, _up;
+    vector3_t _offset;
+    vector4_t _rotation_x,
+              _rotation_y,
+              _rotation_z;
   };
 }

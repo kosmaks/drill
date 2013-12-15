@@ -15,6 +15,7 @@ public:
 
   drill::vector3_t position;
   drill::vector4_t rotation;
+  drill::vector4_t size;
 
 private:
   // dependencies
