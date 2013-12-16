@@ -17,6 +17,9 @@ public:
   drill::vector4_t rotation;
   drill::vector4_t size;
 
+  drill::vertex_t& get_vertex(drill::uint32_t x, drill::uint32_t y, drill::uint32_t z);
+  drill::vertex_t* get_vertices() { return object->get_points(); }
+  void rebuild();
   void reassemble();
 
 private:

@@ -5,6 +5,7 @@ bit_view::bit_view() : drill::view() {
   texture_path = "dist/textures/metal.png";
 
   position = { 0, 0, 0 };
+  scale = { 1, 1, 1 };
   rotation = { 0, 0, 0, 0 };
   c_program = nullptr;
 }
@@ -44,6 +45,7 @@ void bit_view::update(const drill::timeinfo_t &time) {
   transform().model_identity()
              .model_translate(position)
              .model_rotate(rotation)
+             .model_scale(scale)
              .model_scale({ 0.1, 0.15, 0.1 })
              .flush(c_program);
 

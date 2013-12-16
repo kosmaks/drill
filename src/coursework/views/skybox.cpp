@@ -1,19 +1,19 @@
-#include "holder.h"
+#include "skybox.h"
 
-holder_view::holder_view() : drill::view() {
-  model_path = "dist/models/holder.obj";
-  texture_path = "dist/textures/metal.png";
+skybox_view::skybox_view() : drill::view() {
+  model_path = "dist/models/skybox.obj";
+  texture_path = "dist/textures/workshop.png";
 
   position = { 0, 0, 0 };
   rotation = { 0, 0, 0, 0 };
   c_program = nullptr;
 }
 
-holder_view::~holder_view() {
+skybox_view::~skybox_view() {
   if (c_program != nullptr) delete c_program;
 }
 
-void holder_view::init() {
+void skybox_view::init() {
   // Load dependencies
   compiler = require<drill::compiler>();
   linker = require<drill::linker>();
@@ -37,15 +37,14 @@ void holder_view::init() {
                       .create();
 }
 
-void holder_view::update(const drill::timeinfo_t &time) {
+void skybox_view::update(const drill::timeinfo_t &time) {
 
   c_program->use();
 
   transform().model_identity()
              .model_translate(position)
              .model_rotate(rotation)
-             .model_translate({ -0.009, 0, 0 })
-             .model_scale({ 0.7, 0.7, 0.7 })
+             .model_scale({ 7, 7, 1 })
              .flush(c_program);
 
   material().use_texture(c_texture)

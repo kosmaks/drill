@@ -4,17 +4,17 @@
 #include "engine/world.h"
 #include "engine/resources.h"
 
-class bit_view : public drill::view {
+class skybox_view : public drill::view {
 public:
-  bit_view();
-  ~bit_view();
+  skybox_view();
+  ~skybox_view();
   void init();
   void update(const drill::timeinfo_t &time);
 
   std::string model_path,
               texture_path;
 
-  drill::vector3_t position, scale;
+  drill::vector3_t position;
   drill::vector4_t rotation;
 
 private:
