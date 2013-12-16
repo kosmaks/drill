@@ -22,5 +22,10 @@
 #include "virtual/modules/transform.h"
 #include "virtual/modules/dilate.h"
 
+#ifdef OPENGL
 #include "opengl/glplatform.h"
+#endif
+
+#ifdef DIRECTX
 #include "directx/dxplatform.h"
+#endif

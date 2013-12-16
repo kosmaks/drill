@@ -13,11 +13,15 @@ int main(int argc, char **argv) {
 
   // Setting up platform
   if (argc >= 2 && std::string(argv[1]) == "opengl") {
+#ifdef OPENGL
     drill::glplatform *gl = new drill::glplatform();
     platform = gl;
+#endif
   } else {
+#ifdef DIRECTX
     drill::dxplatform *dx = new drill::dxplatform();
     platform = dx;
+#endif
   }
 
   // Init renderer

@@ -11,7 +11,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 }
 
 void glinput::defined() {
-  router = require<context>().get_info<glcontext::glfw_router_t>();
+  router = REQUIRE(context).get_info<glcontext::glfw_router_t>();
 
   router->keyfun = [this] (GLFWwindow *window, int key, int scancode, 
                            int action, int mods) { keyfun(key, action); };

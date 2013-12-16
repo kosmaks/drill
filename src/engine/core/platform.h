@@ -31,9 +31,6 @@ namespace drill {
   public: 
     platform *current_platform; 
     virtual void defined() = 0;
-
-    PLATFORM_DEF_T require() { return current_platform->require<T>(); }
-    PLATFORM_DEF_T include() { return current_platform->include<T>(); }
   };
 
   class platform {
