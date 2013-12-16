@@ -15,7 +15,7 @@ void camera::init() {
   set_fov(60.0);
   set_near_cp(0.1);
   set_far_cp(100.0);
-  look_at({ 0, 3, 3 },
+  look_at({ 0, 6, 7 },
           { 0, 0, 0 },
           { 0, 1, 0 });
 }

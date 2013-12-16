@@ -2,7 +2,7 @@
 
 table_view::table_view() : drill::view() {
   model_path = "dist/models/workbench.obj";
-  texture_path = "dist/textures/metal.png";
+  texture_path = "dist/textures/wood.png";
 
   position = { 0, 0, 0 };
   rotation = { 0, 0, 0, 0 };
@@ -42,9 +42,9 @@ void table_view::update(const drill::timeinfo_t &time) {
   c_program->use();
 
   transform().model_identity()
-             .model_scale({ 0.019, 0.019, 0.019 })
-             .model_rotate(rotation)
              .model_translate(position)
+             .model_rotate(rotation)
+             .model_scale({ 0.04, 0.04, 0.04 })
              .flush(c_program);
 
   material().use_texture(c_texture)

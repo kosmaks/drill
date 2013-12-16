@@ -17,6 +17,8 @@ public:
   drill::vector4_t rotation;
   drill::vector4_t size;
 
+  void reassemble();
+
 private:
   // dependencies
   drill::field<drill::compiler> compiler;
@@ -34,6 +36,4 @@ private:
   drill::c_program *c_program;
   drill::texture texture;
   drill::c_texture *c_texture;
-
-  float angle;
 };

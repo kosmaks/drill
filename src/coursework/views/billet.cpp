@@ -2,16 +2,15 @@
 #include "billet.h"
 
 billet_view::billet_view() : drill::view() {
-  texture_path = "dist/textures/workbench1.png";
+  texture_path = "dist/textures/billet.png";
 
   position = { 0, 0, 0 };
   rotation = { 0, 0, 0, 0 };
-  size = { 60, 20, 40, 0.01 };
+  size = { 60, 40, 50, 0.01 };
 
   c_program = nullptr;
   c_object = nullptr;
   object = nullptr;
-  angle = 0;
 }
 
 billet_view::~billet_view() {
@@ -86,16 +85,10 @@ void billet_view::update(const drill::timeinfo_t &time) {
 
   dilate().flush(c_program);
 
-  //angle += 1;
-  //drill::uint32_t row = angle;
-
-  //for (drill::uint32_t i = row * 100; 
-       //(i < (row + 1) * 100) && (i < size.x * size.y * size.z);
-       //++i) {
-    //object->get_points(i)->vertex = { 0, 0, 0 };
-  //}
-
-  //c_object->free();
-  //c_object = compiler().compile(*object);
   c_object->render();
+}
+
+void billet_view::reassemble() {
+  c_object->free();
+  c_object = compiler().compile(*object);
 }
