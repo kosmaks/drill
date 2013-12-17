@@ -5,7 +5,7 @@ using namespace drill;
 
 void dxinput::defined() {
   LOG_DEBUG("here");
-  router = require<context>().get_info<winapi_router_t>();
+  router = REQUIRE(context).get_info<winapi_router_t>();
 
   router->keydown = [this] (WPARAM w, LPARAM l) { keydown(w, l); };
   router->keyup = [this] (WPARAM w, LPARAM l) { keyup(w, l); };
