@@ -51,10 +51,10 @@ void billet_view::update(const drill::timeinfo_t &time) {
              .model_translate(position)
              .flush(c_program);
 
+  dilate().flush(c_program);
+
   material().use_texture(c_texture)
             .flush(c_program);
-
-  dilate().flush(c_program);
 
   c_object->render();
 }

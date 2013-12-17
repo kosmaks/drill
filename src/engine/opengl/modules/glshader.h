@@ -10,7 +10,8 @@ namespace drill {
   public:
     typedef enum {
       GLSHADER_VERTEX,
-      GLSHADER_FRAGMENT
+      GLSHADER_FRAGMENT,
+      GLSHADER_GEOMETRY
     } type_t;
     virtual ~glshader() {}
 

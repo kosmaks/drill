@@ -14,6 +14,9 @@ c_object* glcompiler::compile(object &obj) {
   glc_object *r = _pool[&obj];
   if (r == nullptr) { _pool[&obj] = r = new glc_object(); }
 
+  glGenVertexArrays(1, &r->vao);
+  glBindVertexArray(r->vao);
+
   r->triangles = generate_vbo(obj.get_triangles(), 
                    sizeof(vertex_t) * obj.get_triangles_count());
   r->triangles_count = obj.get_triangles_count();
@@ -33,13 +36,17 @@ void glc_object::render() {
 
 void glc_object::use_buffer(uint32_t id, uint32_t count, GLenum mode) {
   if (count > 0) {
+    glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, id);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
-    glVertexPointer(3, GL_FLOAT, sizeof(vertex_t), (void*)0);
-    glTexCoordPointer(2, GL_FLOAT, sizeof(vertex_t), (void*)(3 * sizeof(float)));
-    glNormalPointer(GL_FLOAT, sizeof(vertex_t), (void*)(5 * sizeof(float)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*) 0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_t), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
     glDrawArrays(mode, 0, count);
   }
 }
@@ -49,8 +56,5 @@ uint32_t glcompiler::generate_vbo(vertex_t *pointer, uint32_t size) {
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, size, pointer, GL_STATIC_DRAW);
-  glVertexPointer(3, GL_FLOAT, sizeof(vertex_t), (void*)0);
-  glTexCoordPointer(2, GL_FLOAT, sizeof(vertex_t), (void*)(3 * sizeof(float)));
-  glNormalPointer(GL_FLOAT, sizeof(vertex_t), (void*)(5 * sizeof(float)));
   return vbo;
 }

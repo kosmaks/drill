@@ -23,14 +23,18 @@ void glshader::compile(const std::string &source, glshader::type_t type) {
   LOG_DEBUG("Compiling OpenGL shader");
 
   shader_id = glCreateShader((type == GLSHADER_VERTEX) ? GL_VERTEX_SHADER : 
-                                                         GL_FRAGMENT_SHADER);
+                             (type == GLSHADER_FRAGMENT) ? GL_FRAGMENT_SHADER :
+                                                           GL_GEOMETRY_SHADER);
+
   glShaderSource(shader_id, 1, &src, NULL);
   glCompileShader(shader_id);
   glGetShaderInfoLog(shader_id, 4095, &actual_length, gl_log);
 
   if (actual_length > 0) {
     LOG_ERROR("Error compiling " << 
-              ((type == GLSHADER_VERTEX) ? "vertex" : "fragment") <<
+              ((type == GLSHADER_VERTEX) ? "vertex" : 
+               (type == GLSHADER_FRAGMENT) ? "fragment" :
+                                             "geometry") <<
               " shader: " << gl_log);
   }
 }

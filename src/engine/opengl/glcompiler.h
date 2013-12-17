@@ -8,6 +8,7 @@ namespace drill {
   public: 
     void render(); 
     void free() {}
+    uint32_t vao;
     uint32_t triangles, triangles_count;
     uint32_t points, points_count;
   private:
