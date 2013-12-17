@@ -22,7 +22,8 @@ all:
 	@dist/main.exe opengl
 
 windows:
-	$(WC) /Od /I.\lib /I.\src /I.\src\external /I.\src\coursework '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) $(SOURCES) $(SOURCES_DX) $(SOURCES_OGL) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
+	@rc.exe src/drill.rc
+	$(WC) /Od /I.\lib /I.\src /I.\src\external /I.\src\coursework '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' src/drill.res $(WCFLAGS) $(SOURCES) $(SOURCES_DX) $(SOURCES_OGL) $(WLIBS) /link /out:dist\main.exe $(WLINKS)
 	@rm '*.obj' -f
 	@cp -rf 'res/*' dist
 

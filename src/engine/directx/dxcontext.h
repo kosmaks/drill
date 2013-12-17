@@ -12,6 +12,7 @@ namespace drill {
   typedef struct {
     std::function<void(WPARAM, LPARAM)> keydown;
     std::function<void(WPARAM, LPARAM)> keyup;
+    std::function<void(int, int)> mouse;
   } winapi_router_t;
 
   class dxcontext : public context {

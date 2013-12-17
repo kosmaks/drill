@@ -11,6 +11,10 @@ LRESULT CALLBACK WindowProc(HWND h_wnd, UINT message, WPARAM w_param, LPARAM l_p
   switch(message) {
     case WM_KEYDOWN: router->keydown(w_param, l_param); break;
     case WM_KEYUP: router->keyup(w_param, l_param); break;
+    case WM_LBUTTONDOWN: router->mouse(0, 1); break;
+    case WM_LBUTTONUP: router->mouse(0, 0); break;
+    case WM_RBUTTONDOWN: router->mouse(1, 1); break;
+    case WM_RBUTTONUP: router->mouse(1, 0); break;
   }
 
   return DefWindowProc(h_wnd, message, w_param, l_param);
@@ -30,6 +34,7 @@ dxcontext::dxcontext(const std::string &title, int width, int height) {
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
   wc.lpszClassName = "WindowClass1";
+  wc.hIcon = LoadIcon(h_instance, "IDI_ICON1");
 
   RegisterClassEx(&wc);
 

@@ -20,6 +20,7 @@ namespace drill {
 
     void keydown(WPARAM w, LPARAM l);
     void keyup(WPARAM w, LPARAM l);
+    void mouse(int btn, int state);
 
     void set_key(uint32_t key);
 
