@@ -35,6 +35,7 @@ void workbench_scene::init() {
   sx = sz = 0;
   pause = false;
   stop_k = 1;
+  speed_k = 1;
 
   // Setup camera
   cam_source = { 0.7, 5.2, 3.7 };
@@ -71,8 +72,8 @@ void workbench_scene::init() {
 void workbench_scene::keydown() {
   if (pause) return;
   switch (input().get_key()) {
-    case 'Q': moving = true; break;
-    case 'S': started = !started; break;
+    case 'Q': started = !started; break;
+    case 'A': moving = true; break;
 
     case INPUT_KEY_LEFT: sx = -0.002; break;
     case INPUT_KEY_RIGHT: sx = 0.002; break;
@@ -85,17 +86,23 @@ void workbench_scene::keyup() {
   if (pause) return;
 
   switch (input().get_key()) {
-    case 'Q': moving = false; break;
+    case 'A': moving = false; break;
 
-    case 'E': size += 0.1; break; 
-    case 'D': size -= 0.1; break; 
+    case 'W': if (speed_k < 1.5) speed_k += 0.1; break; 
+    case 'S': if (speed_k > 0.1) speed_k -= 0.1; break; 
+    case 'E': if (size < 2) size += 0.1; break; 
+    case 'D': if (size > 0.5) size -= 0.1; break; 
     case 'R': 
-      billet.size.y += 5; 
-      billet.rebuild();
+      if (billet.size.y < 25) {
+        billet.size.y += 2; 
+        billet.rebuild();
+      }
       break; 
     case 'F': 
-      billet.size.y -= 5; 
-      billet.rebuild();
+      if (billet.size.y > 5) {
+        billet.size.y -= 2; 
+        billet.rebuild();
+      }
       break; 
   }
   sx = sz = 0;
@@ -127,8 +134,8 @@ void workbench_scene::update(const drill::timeinfo_t& time) {
           (started) ? power : 0
            : new_power;
 
-  bit.rotation.w += power;
-  holder.rotation.w += power;
+  bit.rotation.w += power * speed_k;
+  holder.rotation.w += power * speed_k;
 
   if (started) {
 
@@ -147,23 +154,27 @@ void workbench_scene::update(const drill::timeinfo_t& time) {
     }
   
     if (!moving) stop_k = 1;
-    coord += speed * stop_k;
+    coord += speed * stop_k * speed_k;
     holder.position.y = coord;
 
     // dependencies
     float k = (1 - (coord - min_coord) / (max_coord - min_coord));
     bit.position.y = coord + 4.85 - 5.3;
-    hand.rotation.w = -180 * k;
+    hand.rotation.w = 180 * k;
     camera.look_at({ cam_source.x, cam_source.y + 0.5f * k, cam_source.z + (-1.5f) * k },
                    cam_target, { 0, 1, 0 });
 
     float tip = bit.position.y - height;
     if (tip <= billet.position.y + billet.size.y * billet.size.w) {
-      stop_k = (handle_collision(tip)) ? 0.3 : 1;
+      if (handle_collision(tip)) {
+        stop_k = (handle_collision(tip)) ? 0.3 : 1;
+        camera.set_rotation_z(speed_k * 0.1 * sin(time.frames_since_start));
+      }
       return;
     } else {
       stop_k = 1;
     }
+
   }
 
   billet.position.x += sx;

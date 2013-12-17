@@ -41,7 +41,7 @@ private:
         power, power_max, 
         height, size,
         sx, sz,
-        stop_k;
+        stop_k, speed_k;
 
   bool moving, started, pause;
 
