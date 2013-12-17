@@ -3,6 +3,8 @@
 workbench_scene::~workbench_scene() {
   input().on_keydown.off(&h_keydown);
   input().on_keyup.off(&h_keyup);
+  input().on_mousedown.off(&h_mousedown);
+  input().on_mouseup.off(&h_mouseup);
 }
 
 void workbench_scene::init() {
@@ -30,6 +32,7 @@ void workbench_scene::init() {
   height = 0.55;
   size = 1;
   sx = sz = 0;
+  pause = false;
 
   // Setup camera
   cam_source = { 0.7, 5.2, 3.7 };
@@ -54,12 +57,17 @@ void workbench_scene::init() {
 
   // Bindings
   h_keydown = [this] { keydown(); };
-  input().on_keydown.on(&h_keydown);
   h_keyup = [this] { keyup(); };
+  h_mousedown = [this] { mousedown(); };
+  h_mouseup = [this] { mouseup(); };
+  input().on_keydown.on(&h_keydown);
   input().on_keyup.on(&h_keyup);
+  input().on_mousedown.on(&h_mousedown);
+  input().on_mouseup.on(&h_mouseup);
 }
 
 void workbench_scene::keydown() {
+  if (pause) return;
   switch (input().get_key()) {
     case 'Q': moving = true; break;
     case 'S': started = !started; break;
@@ -72,6 +80,8 @@ void workbench_scene::keydown() {
 }
 
 void workbench_scene::keyup() {
+  if (pause) return;
+
   switch (input().get_key()) {
     case 'Q': moving = false; break;
 
@@ -89,8 +99,17 @@ void workbench_scene::keyup() {
   sx = sz = 0;
 }
 
+void workbench_scene::mousedown() {
+  pause = !pause;
+}
+
+void workbench_scene::mouseup() {
+}
+
 void workbench_scene::update(const drill::timeinfo_t& time) {
   drill::scene::update(time);
+
+  if (pause) return;
 
   //
   // Sizes
@@ -132,7 +151,7 @@ void workbench_scene::update(const drill::timeinfo_t& time) {
     float k = (1 - (coord - min_coord) / (max_coord - min_coord));
     bit.position.y = coord + 4.85 - 5.3;
     hand.rotation.w = -180 * k;
-    camera.look_at({ cam_source.x, cam_source.y + 0.5 * k, cam_source.z + (-1.5) * k },
+    camera.look_at({ cam_source.x, cam_source.y + 0.5f * k, cam_source.z + (-1.5f) * k },
                    cam_target, { 0, 1, 0 });
 
     float tip = bit.position.y - height;

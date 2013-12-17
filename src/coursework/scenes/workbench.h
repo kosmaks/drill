@@ -21,7 +21,8 @@ public:
 
 private:
   drill::field<drill::input> input;
-  drill::ehandler h_keydown, h_keyup;
+  drill::ehandler h_keydown, h_keyup,
+                  h_mousedown, h_mouseup;
 
   drill::camera camera;
   table_view table;
@@ -40,9 +41,12 @@ private:
         power, power_max, 
         height, size,
         sx, sz;
-  bool moving, started;
+
+  bool moving, started, pause;
 
   void handle_collision(float tip);
   void keydown();
   void keyup();
+  void mousedown();
+  void mouseup();
 };

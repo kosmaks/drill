@@ -97,7 +97,6 @@ void billet_view::rebuild() {
 }
 
 void billet_view::reassemble() {
-  LOG_DEBUG("reassemble");
   if (c_object != nullptr) c_object->free();
   c_object = compiler().compile(*object);
 }

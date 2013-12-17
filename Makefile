@@ -19,7 +19,7 @@ SOURCES_DX = $(wildcard src/engine/directx/*.cpp) $(wildcard src/engine/directx/
 all:
 	@$(CC) -o dist/main.exe $(CFLAGS) $(CLIBS) $(SOURCES) $(SOURCES_OGL) -I./lib -I./src -I./src/external -I./src/coursework -O1
 	@cp -rf res/* dist
-	@dist/main.exe
+	@dist/main.exe opengl
 
 windows:
 	$(WC) /Od /I.\lib /I.\src /I.\src\external /I.\src\coursework '/IC:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include' $(WCFLAGS) $(SOURCES) $(SOURCES_DX) $(SOURCES_OGL) $(WLIBS) /link /out:dist\main.exe $(WLINKS)

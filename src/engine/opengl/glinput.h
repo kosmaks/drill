@@ -18,7 +18,8 @@ namespace drill {
   private:
     glcontext::glfw_router_t *router;
 
-    void keyfun(int32_t key, int action);
+    void keyfun(int32_t key, int32_t action);
+    void mousebutton(int32_t button, int32_t action);
 
     int32_t _key;
     uint32_t _mouse_x, _mouse_y;
