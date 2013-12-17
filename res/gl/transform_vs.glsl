@@ -8,14 +8,29 @@ uniform mat4 m_model;
 uniform mat4 m_projection;
 uniform mat4 m_view;
 
-out vec4 normal;
+out vec3 vertex;
+out vec3 normal;
 out vec2 texcoord;
-out vec4 _normal;
+out vec3 _vertex;
+out vec3 _normal;
 out vec2 _texcoord;
 
+out mat4 NM;
+out mat4 VM;
+out mat4 PVM;
+
 void main() {
+  VM = m_view * m_model;
+  PVM = m_projection * m_view * m_model;
+  NM = transpose(inverse(VM));
+
+  vertex = (VM * vec4(vertex_position, 1.0)).xyz;
+  _vertex = vertex;
+
+  normal = normalize((NM * vec4(vertex_normal, 0.0)).xyz);
+  _normal = normal;
+
   _texcoord = texcoord = vertex_texture;
-  _normal = normal = vec4(vertex_normal, 1.0);
-  mat4 PVM = m_projection * m_view * m_model;
-  gl_Position = PVM * vec4(vertex_position, 1.0);
+
+  gl_Position = m_projection * vec4(vertex, 1.0);
 }

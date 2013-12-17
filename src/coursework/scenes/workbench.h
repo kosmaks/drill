@@ -40,11 +40,12 @@ private:
         coord, min_coord, max_coord,
         power, power_max, 
         height, size,
-        sx, sz;
+        sx, sz,
+        stop_k;
 
   bool moving, started, pause;
 
-  void handle_collision(float tip);
+  bool handle_collision(float tip);
   void keydown();
   void keyup();
   void mousedown();

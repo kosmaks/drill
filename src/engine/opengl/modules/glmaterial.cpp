@@ -14,6 +14,7 @@ glmaterial::~glmaterial() {
 void glmaterial::defined() {
   compile(file_system::read_text_file(CFG_GL_MATERIAL_FS_PATH), GLSHADER_FRAGMENT);
   color({ 1.0, 1.0, 1.0, 1.0 });
+  _timer = 0;
 }
 
 c_texture* glmaterial::compile_texture(texture &texture) {
@@ -56,6 +57,7 @@ material& glmaterial::color(const vector4_t &color) {
 void glmaterial::flush() {
   pass_param("primary_texture", (uint32_t)0);
   pass_param("color", _color);
+  pass_param("timer", _timer++);
 }
 
 glc_texture::glc_texture(uint32_t tex_id) : c_texture(), _tex_id(tex_id) { }

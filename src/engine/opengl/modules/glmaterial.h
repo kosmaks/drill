@@ -28,6 +28,7 @@ namespace drill {
 
   private:
     vector4_t _color;
+    float _timer;
     std::map<void*, glc_texture*> _pool;
   };
 }

@@ -46,7 +46,7 @@ void bit_view::update(const drill::timeinfo_t &time) {
              .model_translate(position)
              .model_rotate(rotation)
              .model_scale(scale)
-             .model_scale({ 0.1, 0.15, 0.1 })
+             .model_scale({ 0.1, 0.2, 0.1 })
              .flush(c_program);
 
   material().use_texture(c_texture)

@@ -6,7 +6,7 @@ billet_view::billet_view() : drill::view() {
 
   position = { 0, 0, 0 };
   rotation = { 0, 0, 0, 0 };
-  size = { 60, 40, 50, 0.01 };
+  size = { 30, 10, 25, 0.015 };
 
   c_program = nullptr;
   c_object = nullptr;
@@ -71,25 +71,19 @@ void billet_view::rebuild() {
   drill::vertex_t *points = object->get_points();
 
   drill::uint32_t i = 0;
-  drill::vector3_t up = { 0, 1, 0 },
-                   down = { 0, -1, 0 },
-                   left = { -1, 0, 0 },
-                   right = { 1, 0, 0 },
-                   forward = { 0, 0, 1 },
-                   back = { 0, 0, -1 };
-
   for (drill::uint32_t x = 0; x < size.x; ++x)
   for (drill::uint32_t y = 0; y < size.y; ++y)
   for (drill::uint32_t z = 0; z < size.z; ++z) {
+    float offset = (x == 0) ? 0.0 :
+                   (x == size.x - 1) ? 0.0 :
+                   (y == 0) ? 0.0 :
+                   (y == size.y - 1) ? 0.0 :
+                   (z == 0) ? 0.0 :
+                   (z == size.z - 1) ? 0.0 : 0.5;
+
     points[i].vertex = { x * size.w, y * size.w, z * size.w };
-    points[i].texture = { ((float)x) / size.x, ((float)z) / size.z };
-    points[i].normal = (x == 0) ? left :
-                       (x == size.x - 1) ? right :
-                       (y == 0) ? down :
-                       (y == size.y - 1) ? up :
-                       (z == 0) ? back :
-                       (z == size.z - 1) ? forward :
-                       back;
+    points[i].texture = { ((float)x) / size.x, offset + ((float)z) / size.z / 2 };
+    points[i].normal = { 0, 1, 0 };
     i += 1;
   }
 

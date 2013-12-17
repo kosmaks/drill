@@ -1,3 +1,4 @@
+#include <cmath>
 #include "workbench.h"
 
 workbench_scene::~workbench_scene() {
@@ -29,10 +30,11 @@ void workbench_scene::init() {
   coord = max_coord;
   speed = 0;
   power = 0;
-  height = 0.55;
+  height = 0.715;
   size = 1;
   sx = sz = 0;
   pause = false;
+  stop_k = 1;
 
   // Setup camera
   cam_source = { 0.7, 5.2, 3.7 };
@@ -74,8 +76,8 @@ void workbench_scene::keydown() {
 
     case INPUT_KEY_LEFT: sx = -0.002; break;
     case INPUT_KEY_RIGHT: sx = 0.002; break;
-    case INPUT_KEY_UP: sz = 0.002; break;
-    case INPUT_KEY_DOWN: sz = -0.002; break;
+    case INPUT_KEY_UP: sz = -0.002; break;
+    case INPUT_KEY_DOWN: sz = 0.002; break;
   }
 }
 
@@ -143,8 +145,9 @@ void workbench_scene::update(const drill::timeinfo_t& time) {
       else if (coord < min_coord) coord = min_coord;
       speed = 0;
     }
-
-    coord += speed;
+  
+    if (!moving) stop_k = 1;
+    coord += speed * stop_k;
     holder.position.y = coord;
 
     // dependencies
@@ -156,8 +159,10 @@ void workbench_scene::update(const drill::timeinfo_t& time) {
 
     float tip = bit.position.y - height;
     if (tip <= billet.position.y + billet.size.y * billet.size.w) {
-      handle_collision(tip);
+      stop_k = (handle_collision(tip)) ? 0.3 : 1;
       return;
+    } else {
+      stop_k = 1;
     }
   }
 
@@ -165,24 +170,35 @@ void workbench_scene::update(const drill::timeinfo_t& time) {
   billet.position.z += sz;
 }
 
-void workbench_scene::handle_collision(float tip) {
-  float r = size * 3;
+bool workbench_scene::handle_collision(float tip) {
+  float r = size * 1.5;
   float x = (bit.position.x - billet.position.x) / billet.size.w;
   float z = (bit.position.z - billet.position.z) / billet.size.w;
-  bool changed = false;
+  int changed = 0;
   drill::uint32_t depth = (tip - billet.position.y) / billet.size.w;
 
-  for (drill::int32_t _x = x - r; _x < x + r; _x++)
-  for (drill::int32_t _z = z - r; _z < z + r; _z++) {
+  drill::int32_t _x, _z;
+
+  for (drill::int32_t i = -r; i <= r; i++)
+  for (drill::int32_t j = -r; j <= r; j++) {
+    _x = i + x;
+    _z = j + z;
+
     if (_x < 0 || _z < 0 || 
         _x >= billet.size.x || 
-        _z >= billet.size.z) continue;
+        _z >= billet.size.z ||
+        (i*i + j*j) > (r*r)) continue;
 
-    for (drill::uint32_t i = billet.size.y; i > depth; i--) {
-      billet.get_vertex(_x, i, _z).vertex = { 0, 0, 0 };
+    for (drill::uint32_t k = billet.size.y; k > depth; k--) {
+      billet.get_vertex(_x, k, _z).vertex = { 0, 0, 0 };
     }
-    changed = true;
+    changed++;
   }
 
-  if (changed) billet.reassemble();
+  if (changed > 2) {
+    billet.reassemble();
+    return true;
+  } else {
+    return false;
+  }
 }
