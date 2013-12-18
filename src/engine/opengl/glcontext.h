@@ -18,8 +18,8 @@ namespace drill {
     } glfw_router_t;
 
     glcontext(const std::string &title = "GLFW Context", 
-              int width=640, 
-              int height=480);
+              int width=1200, 
+              int height=800);
     void load();
     void swap_buffers();
     void clear_screen();
