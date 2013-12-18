@@ -11,25 +11,29 @@ Drill
 Пример работы
 -------------
 
-// тут картиночка типо
-
+![alt tag](https://github.com/kosmaks/drill/blob/master/screenshot.png?raw=true)
 
 Как собрать и запустить
 -----------------------
 
-Необходимые библиотеки: OpenGL 4.1+, DirectX 11 (только для Windows)
-Компилятор: gcc (4.8), cl.exe (лол)
+Необходимо: 
+* OpenGL 4.1+
+* DirectX 11 (для Windows)
+* gcc (для OSX)
+* cl.exe (для Windows)
+* glfw, glew, glm
+* GNU utils (для Windows тоже :)
 
 OSX:
 
-```
+```bash
 $ mkdir dist
 $ make
 ```
 
 Windows:
 
-```
+```bash
 > mkdir dist
 > make windows
 > make gl # чтобы запустить opengl версию
