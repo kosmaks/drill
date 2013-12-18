@@ -30,8 +30,8 @@ $ make
 Windows:
 
 ```
-$ mkdir dist
-$ make windows
-$ make gl # чтобы запустить opengl версию
-$ make dx # чтобы запустить directx версию
+> mkdir dist
+> make windows
+> make gl # чтобы запустить opengl версию
+> make dx # чтобы запустить directx версию
 ```
